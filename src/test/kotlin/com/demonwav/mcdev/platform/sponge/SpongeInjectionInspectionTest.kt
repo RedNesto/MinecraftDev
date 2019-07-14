@@ -87,7 +87,7 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test @DefaultConfig on ConfigurationLoader`() {
+    fun `test @ConfigDir on ConfigurationLoader`() {
         doTest("""
 package test;
 
@@ -95,13 +95,33 @@ import com.google.inject.Inject;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.plugin.Plugin;
 
 @Plugin(id = "a-plugin")
 public class ASpongePlugin {
     @Inject
+    @DefaultConfig(sharedRoot = false)
     <error descr="Injected ConfigurationLoader cannot be annotated with @ConfigDir.">@ConfigDir(sharedRoot = false)</error>
     private ConfigurationLoader<CommentedConfigurationNode> configurationLoader;
+}
+""")
+    }
+
+    fun `test ConfigurationLoader not annotated with @DefaultConfig`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.config.DefaultConfig;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    @Inject
+    private ConfigurationLoader<CommentedConfigurationNode> <error descr="Injected ConfigurationLoader must be annotated with @DefaultConfig.">configurationLoader</error>;
 }
 """)
     }
