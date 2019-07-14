@@ -157,12 +157,21 @@
         <!-- Sponge Line Marker Provider -->
         <codeInsight.lineMarkerProvider language="" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorLineMarkerProvider"/>
 
+        <implicitUsageProvider implementation="com.demonwav.mcdev.platform.sponge.insight.SpongeImplicitUsageProvider" />
+
         <!-- Sponge Annotator -->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorAnnotator"/>
 
         <library.presentationProvider implementation="com.demonwav.mcdev.platform.sponge.framework.SpongePresentationProvider" />
         <importFilter implementation="com.demonwav.mcdev.platform.sponge.SpongeImportFilter" />
 
+        <localInspection displayName="Invalid @Inject usage in Sponge plugin class"
+                         groupName="Minecraft Sponge"
+                         language="JAVA"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         hasStaticDescription="true"
+                         implementationClass="com.demonwav.mcdev.platform.sponge.inspection.SpongeInjectionInspection"/>
         <localInspection displayName="Wrong Sponge logger implementation"
                          groupName="Minecraft"
                          language="JAVA"
@@ -170,6 +179,13 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.sponge.inspection.SpongeLoggingInspection"/>
+        <localInspection displayName="Sponge plugin class validity"
+                         groupName="Minecraft Sponge"
+                         language="JAVA"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         hasStaticDescription="true"
+                         implementationClass="com.demonwav.mcdev.platform.sponge.inspection.SpongePluginClassInspection"/>
         <!--endregion-->
 
         <!--region FORGE-->
