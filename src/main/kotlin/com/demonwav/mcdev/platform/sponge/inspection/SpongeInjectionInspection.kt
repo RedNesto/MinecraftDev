@@ -101,6 +101,15 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
                     )
                 }
             } else if (name == "ninja.leaping.configurate.loader.ConfigurationLoader") {
+                if (defaultConfig == null) {
+                    holder.registerProblem(
+                        variable.nameIdentifier ?: variable,
+                        "Injected ConfigurationLoader must be annotated with @DefaultConfig.",
+                        ProblemHighlightType.GENERIC_ERROR,
+                        AddAnnotationFix(SpongeConstants.DEFAULT_CONFIG_ANNOTATION, annotationsOwner)
+                    )
+                }
+
                 if (configDir != null) {
                     holder.registerProblem(
                         configDir,
