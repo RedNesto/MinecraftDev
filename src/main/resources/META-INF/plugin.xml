@@ -159,6 +159,10 @@
         <codeInsight.lineMarkerProvider language="" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorLineMarkerProvider"/>
 
         <implicitUsageProvider implementation="com.demonwav.mcdev.platform.sponge.insight.SpongeImplicitUsageProvider" />
+        <psi.referenceContributor language="JAVA"
+                                  implementation="com.demonwav.mcdev.platform.sponge.reference.SpongeAssetReferenceContributor"/>
+        <completion.contributor language="JAVA" id="spongeAsset"
+                                implementationClass="com.demonwav.mcdev.platform.sponge.reference.SpongeAssetCompletionContributor"/>
 
         <!-- Sponge Annotator -->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorAnnotator"/>

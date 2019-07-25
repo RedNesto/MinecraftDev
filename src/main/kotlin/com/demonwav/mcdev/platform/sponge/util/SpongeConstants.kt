@@ -26,6 +26,7 @@ object SpongeConstants {
     const val OPTIONAL = "java.util.Optional"
     const val DEFAULT_CONFIG_ANNOTATION = "org.spongepowered.api.config.DefaultConfig"
     const val CONFIG_DIR_ANNOTATION = "org.spongepowered.api.config.ConfigDir"
+    const val ASSET_ID_ANNOTATION = "org.spongepowered.api.asset.AssetId"
     const val INJECT_ANNOTATION = "com.google.inject.Inject"
 
     // Taken from https://github.com/SpongePowered/plugin-meta/blob/185f5c2/src/main/java/org/spongepowered/plugin/meta/PluginMetadata.java#L60

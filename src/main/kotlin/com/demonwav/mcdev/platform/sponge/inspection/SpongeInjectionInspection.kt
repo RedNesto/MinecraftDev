@@ -3,18 +3,27 @@ package com.demonwav.mcdev.platform.sponge.inspection
 import com.demonwav.mcdev.platform.sponge.SpongeModuleType
 import com.demonwav.mcdev.platform.sponge.util.SpongeConstants
 import com.demonwav.mcdev.platform.sponge.util.isInSpongePluginClass
+import com.demonwav.mcdev.platform.sponge.util.spongePluginClassId
+import com.demonwav.mcdev.util.constantStringValue
+import com.demonwav.mcdev.util.findModule
 import com.demonwav.mcdev.util.fullQualifiedName
 import com.intellij.codeInsight.intention.AddAnnotationFix
 import com.intellij.codeInsight.intention.QuickFixFactory
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool
 import com.intellij.codeInspection.InspectionManager
+import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.ide.util.PackageUtil
+import com.intellij.openapi.application.runWriteAction
+import com.intellij.openapi.module.Module
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.psi.JavaElementVisitor
 import com.intellij.psi.JavaPsiFacade
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiField
@@ -24,6 +33,7 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiVariable
 import com.intellij.psi.impl.source.PsiClassReferenceType
+import com.intellij.psi.util.createSmartPointer
 
 class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
 
@@ -76,6 +86,55 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING
                 )
                 return
+            }
+
+            if (name == "org.spongepowered.api.asset.Asset") {
+                val assetId = variable.getAnnotation(SpongeConstants.ASSET_ID_ANNOTATION)
+                if (assetId == null) {
+                    holder.registerProblem(
+                        variable.nameIdentifier ?: variable,
+                        "Injected Assets must be annotated with @AssetId",
+                        ProblemHighlightType.GENERIC_ERROR,
+                        AddAnnotationFix(SpongeConstants.ASSET_ID_ANNOTATION, annotationsOwner)
+                    )
+                } else {
+                    variable.findModule()?.let { module ->
+                        val assetPathAttributeValue = assetId.findAttributeValue(null)
+                        val assetPath = assetPathAttributeValue?.constantStringValue?.replace('\\', '/') ?: return@let
+
+                        val pluginId = variable.spongePluginClassId() ?: return@let
+                        val relativeAssetPath = "assets/$pluginId/$assetPath"
+
+                        val roots = ModuleRootManager.getInstance(module).getSourceRoots(false)
+                        val pathIsDirectory = roots.any { root ->
+                            root.findFileByRelativePath(relativeAssetPath)?.isDirectory == true
+                        }
+                        if (pathIsDirectory || relativeAssetPath.endsWith('/')) {
+                            holder.registerProblem(
+                                assetPathAttributeValue,
+                                "AssetId must point to a file.",
+                                ProblemHighlightType.GENERIC_ERROR
+                            )
+                            return@let
+                        }
+
+
+                        if (roots.none { it.findFileByRelativePath(relativeAssetPath) != null }) {
+                            val fix = roots.firstOrNull()?.let { contentRoot ->
+                                variable.manager.findDirectory(contentRoot)?.let { directory ->
+                                    CreateAssetFileFix(assetPath, module, pluginId, directory)
+                                }
+                            }
+
+                            holder.registerProblem(
+                                assetPathAttributeValue,
+                                "Asset '$assetPath' does not exist.",
+                                ProblemHighlightType.GENERIC_ERROR,
+                                fix
+                            )
+                        }
+                    }
+                }
             }
 
             // @ConfigDir and @DefaultConfig usages
@@ -194,7 +253,8 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
 
             "ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory",
             "com.google.inject.Injector",
-            "org.spongepowered.api.plugin.PluginContainer"
+            "org.spongepowered.api.plugin.PluginContainer",
+            "org.spongepowered.api.asset.Asset"
         )
     }
 
@@ -225,6 +285,40 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
                 startElement
             )
             startElement.replace(newRef)
+        }
+    }
+
+    class CreateAssetFileFix(
+        private val assetPath: String,
+        private val module: Module,
+        private val pluginId: String,
+        directory: PsiDirectory
+    ) : LocalQuickFix {
+
+        private val dirPointer = directory.createSmartPointer()
+
+        override fun getFamilyName(): String = "Create asset file"
+
+        override fun startInWriteAction(): Boolean = false
+
+        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+            val index = assetPath.lastIndexOf('/')
+            val assetDir = if (index > 0)
+                "." + assetPath.substring(0, index).replace('/', '.')
+            else ""
+            val fileName = assetPath.substring(index + 1)
+            val createdDir = PackageUtil.findOrCreateDirectoryForPackage(
+                module,
+                "assets.$pluginId$assetDir",
+                dirPointer.element,
+                false
+            )
+            val createdFile = runWriteAction {
+                createdDir?.createFile(fileName)
+            } ?: return
+            if (createdFile.canNavigate()) {
+                createdFile.navigate(true)
+            }
         }
     }
 }
