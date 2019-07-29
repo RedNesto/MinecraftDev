@@ -93,7 +93,7 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
                 if (assetId == null) {
                     holder.registerProblem(
                         variable.nameIdentifier ?: variable,
-                        "Injected Assets must be annotated with @AssetId",
+                        "Injected Assets must be annotated with @AssetId.",
                         ProblemHighlightType.GENERIC_ERROR,
                         AddAnnotationFix(SpongeConstants.ASSET_ID_ANNOTATION, annotationsOwner)
                     )
@@ -117,7 +117,6 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
                             )
                             return@let
                         }
-
 
                         if (roots.none { it.findFileByRelativePath(relativeAssetPath) != null }) {
                             val fix = roots.firstOrNull()?.let { contentRoot ->

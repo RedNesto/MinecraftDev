@@ -1,19 +1,24 @@
 package com.demonwav.mcdev.platform.sponge
 
 import com.demonwav.mcdev.platform.sponge.inspection.SpongeInjectionInspection
+import com.intellij.openapi.application.runWriteAction
 import org.intellij.lang.annotations.Language
 
 class SpongeInjectionInspectionTest : BaseSpongeTest() {
 
-    private fun doTest(@Language("JAVA") code: String) {
+    private fun doTest(@Language("JAVA") code: String, vararg resourceFiles: String) {
         buildProject {
             src {
                 java("test/ASpongePlugin.java", code)
             }
         }
 
+        val createdResourceFiles = resourceFiles.map { myFixture.addFileToProject(it, "") }
+
         myFixture.enableInspections(SpongeInjectionInspection::class.java)
         myFixture.checkHighlighting(false, false, false)
+
+        runWriteAction { createdResourceFiles.forEach { it.virtualFile.delete(this) } }
     }
 
     fun `test uninjectable type`() {
@@ -29,6 +34,58 @@ public class ASpongePlugin {
     private <error descr="String cannot be injected by Sponge.">String</error> string;
 }
 """)
+    }
+
+    fun `test injected Asset without AssetId`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    @Inject
+    private Asset <error descr="Injected Assets must be annotated with @AssetId.">asset</error>;
+}
+""")
+    }
+
+    fun `test absent asset`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.asset.AssetId;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    @Inject
+    @AssetId(<error descr="Asset 'absent_asset' does not exist.">"absent_asset"</error>)
+    private Asset asset;
+}
+""")
+    }
+
+    fun `test asset is a directory`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.asset.AssetId;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    @Inject
+    @AssetId(<error descr="AssetId must point to a file.">"dir"</error>)
+    private Asset asset;
+}
+""", "assets/a-plugin/dir/an_asset.txt")
     }
 
     fun `test path injection with @ConfigDir and @DefaultConfig`() {
