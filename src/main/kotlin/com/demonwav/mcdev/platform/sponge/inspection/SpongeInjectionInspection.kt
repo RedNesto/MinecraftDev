@@ -3,6 +3,7 @@ package com.demonwav.mcdev.platform.sponge.inspection
 import com.demonwav.mcdev.platform.sponge.SpongeModuleType
 import com.demonwav.mcdev.platform.sponge.util.SpongeConstants
 import com.demonwav.mcdev.platform.sponge.util.isInSpongePluginClass
+import com.demonwav.mcdev.platform.sponge.util.isInjectOptional
 import com.demonwav.mcdev.platform.sponge.util.spongePluginClassId
 import com.demonwav.mcdev.util.constantStringValue
 import com.demonwav.mcdev.util.findModule
@@ -23,6 +24,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.psi.JavaElementVisitor
 import com.intellij.psi.JavaPsiFacade
+import com.intellij.psi.PsiAnnotation
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
@@ -69,6 +71,18 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
         override fun visitMethod(method: PsiMethod) {
             if (!method.hasAnnotation(SpongeConstants.INJECT_ANNOTATION) || !method.isInSpongePluginClass()) {
                 return
+            }
+
+            if (method.isConstructor) {
+                val annotation = method.getAnnotation(SpongeConstants.INJECT_ANNOTATION)
+                if (annotation != null && isInjectOptional(annotation)) {
+                    holder.registerProblem(
+                        annotation.parameterList,
+                        "Constructor injection cannot be optional.",
+                        ProblemHighlightType.GENERIC_ERROR,
+                        RemoveAnnotationParameters(annotation, "Remove 'optional' parameter")
+                    )
+                }
             }
 
             method.parameterList.parameters.forEach { variable -> this.checkInjection(variable, variable) }
@@ -265,6 +279,19 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
             "org.spongepowered.api.plugin.PluginContainer",
             "org.spongepowered.api.asset.Asset"
         )
+    }
+
+    class RemoveAnnotationParameters(val annotation: PsiAnnotation, val txt: String) : LocalQuickFixOnPsiElement(annotation) {
+
+        override fun getFamilyName(): String = name
+
+        override fun getText(): String = txt
+
+        override fun invoke(project: Project, file: PsiFile, startElement: PsiElement, endElement: PsiElement) {
+            val newAnnotation = JavaPsiFacade.getElementFactory(project)
+                .createAnnotationFromText("@" + (startElement as PsiAnnotation).qualifiedName, startElement.parent)
+            startElement.replace(newAnnotation)
+        }
     }
 
     class WrongConfLoaderTypeParamFix(ref: PsiJavaCodeReferenceElement) : LocalQuickFixOnPsiElement(ref) {

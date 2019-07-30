@@ -2,12 +2,11 @@ package com.demonwav.mcdev.platform.sponge.insight
 
 import com.demonwav.mcdev.platform.sponge.util.SpongeConstants
 import com.demonwav.mcdev.platform.sponge.util.isInSpongePluginClass
+import com.demonwav.mcdev.platform.sponge.util.isInjected
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider
-import com.intellij.lang.jvm.annotation.JvmAnnotationConstantValue
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiModifierListOwner
 
 class SpongeImplicitUsageProvider : ImplicitUsageProvider {
     override fun isImplicitWrite(element: PsiElement): Boolean = isPluginClassInjectedField(element, false)
@@ -36,16 +35,5 @@ class SpongeImplicitUsageProvider : ImplicitUsageProvider {
         }
 
         return false
-    }
-
-    private fun isInjected(element: PsiModifierListOwner, optionalSensitive: Boolean): Boolean {
-        val annotation = element.getAnnotation(SpongeConstants.INJECT_ANNOTATION) ?: return false
-        if (!optionalSensitive) {
-            return true
-        }
-
-        val optional = annotation.findAttribute("optional") ?: return true
-        val value = optional.attributeValue
-        return value is JvmAnnotationConstantValue && value.constantValue == false
     }
 }

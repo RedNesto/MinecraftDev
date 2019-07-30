@@ -70,6 +70,26 @@ public class ASpongePlugin {
 """)
     }
 
+    fun `test constructor optional injection`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    private Logger logger;
+
+    @Inject<error descr="Constructor injection cannot be optional.">(optional = true)</error>
+    private ASpongePlugin(Logger logger) {
+        this.logger = logger;
+    }
+}
+""")
+    }
+
     fun `test method uninjectable type`() {
         doTest("""
 package test;
