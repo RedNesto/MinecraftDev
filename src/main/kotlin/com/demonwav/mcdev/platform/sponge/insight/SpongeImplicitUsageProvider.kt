@@ -12,27 +12,18 @@ class SpongeImplicitUsageProvider : ImplicitUsageProvider {
 
     override fun isImplicitRead(element: PsiElement): Boolean = false
 
-    override fun isImplicitUsage(element: PsiElement): Boolean = isPluginClassEmptyConstructor(element) || isPluginClassInjectedSetter(element)
+    override fun isImplicitUsage(element: PsiElement): Boolean =
+        isPluginClassEmptyConstructor(element) || isPluginClassInjectedSetter(element)
 
-    override fun isImplicitlyNotNullInitialized(element: PsiElement): Boolean = isPluginClassInjectedField(element, true)
+    override fun isImplicitlyNotNullInitialized(element: PsiElement): Boolean =
+        isPluginClassInjectedField(element, true)
 
-    private fun isPluginClassEmptyConstructor(element: PsiElement): Boolean {
-        return element is PsiMethod && element.isInSpongePluginClass() && element.isConstructor && !element.hasParameters()
-    }
+    private fun isPluginClassEmptyConstructor(element: PsiElement): Boolean =
+        element is PsiMethod && element.isInSpongePluginClass() && element.isConstructor && !element.hasParameters()
 
-    private fun isPluginClassInjectedField(element: PsiElement, optionalSensitive: Boolean): Boolean {
-        if (element is PsiField && element.isInSpongePluginClass()) {
-            return isInjected(element, optionalSensitive)
-        }
+    private fun isPluginClassInjectedField(element: PsiElement, optionalSensitive: Boolean): Boolean =
+        element is PsiField && element.isInSpongePluginClass() && isInjected(element, optionalSensitive)
 
-        return false
-    }
-
-    private fun isPluginClassInjectedSetter(element: PsiElement): Boolean {
-        if (element is PsiMethod && element.isInSpongePluginClass()) {
-            return isInjected(element, false)
-        }
-
-        return false
-    }
+    private fun isPluginClassInjectedSetter(element: PsiElement): Boolean =
+        element is PsiMethod && element.isInSpongePluginClass() && isInjected(element, false)
 }
