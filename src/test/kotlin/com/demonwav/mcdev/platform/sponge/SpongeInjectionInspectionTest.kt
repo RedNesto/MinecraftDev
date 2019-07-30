@@ -36,7 +36,7 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test uninjectable type`() {
+    fun `test field uninjectable type`() {
         doTest("""
 package test;
 
@@ -47,6 +47,44 @@ import org.spongepowered.api.plugin.Plugin;
 public class ASpongePlugin {
     @Inject
     private <error descr="String cannot be injected by Sponge.">String</error> string;
+}
+""")
+    }
+
+    fun `test constructor uninjectable type`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    private String string;
+
+    @Inject
+    private ASpongePlugin(<error descr="String cannot be injected by Sponge.">String</error> string) {
+        this.string = string;
+    }
+}
+""")
+    }
+
+    fun `test method uninjectable type`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    private String string;
+
+    @Inject
+    private void setString(<error descr="String cannot be injected by Sponge.">String</error> string) {
+        this.string = string;
+    }
 }
 """)
     }
