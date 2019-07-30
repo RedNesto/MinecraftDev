@@ -22,5 +22,26 @@ class SpongeReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(PsiJavaPatterns.psiLiteral(StandardPatterns.string())
                 .insideAnnotationAttribute(SpongeConstants.GETTER_ANNOTATION), GetterEventListenerReferenceResolver)
+
+        registrar.registerReferenceProvider(PsiJavaPatterns.or(
+            // @Dependency(String id)
+            PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+                .insideAnnotationAttribute(SpongeConstants.DEPENDENCY_ANNOTATION, "id"),
+            // PluginManager#getPlugin(String pluginId)
+            PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+                .methodCallParameter(PsiJavaPatterns.psiMethod()
+                    .definedInClass(SpongeConstants.PLUGIN_MANAGER)
+                    .withName("getPlugin")),
+            // PluginManager#isLoaded(String pluginId)
+            PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+                .methodCallParameter(PsiJavaPatterns.psiMethod()
+                    .definedInClass(SpongeConstants.PLUGIN_MANAGER)
+                    .withName("isLoaded")),
+            // GameRegistry#getAllFor(String pluginId, Class<CatalogType> typeClass)
+            PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+                .methodCallParameter(PsiJavaPatterns.psiMethod()
+                    .definedInClass(SpongeConstants.GAME_REGISTRY)
+                    .withName("getAllFor"))
+        ), SpongePluginIdReferenceResolver)
     }
 }

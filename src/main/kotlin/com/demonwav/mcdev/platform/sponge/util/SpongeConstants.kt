@@ -22,4 +22,6 @@ object SpongeConstants {
     const val CANCELLABLE = "org.spongepowered.api.event.Cancellable"
     const val EVENT_ISCANCELLED_METHOD_NAME = "isCancelled"
     const val OPTIONAL = "java.util.Optional"
+    const val PLUGIN_MANAGER = "org.spongepowered.api.plugin.PluginManager"
+    const val GAME_REGISTRY = "org.spongepowered.api.GameRegistry"
 }
