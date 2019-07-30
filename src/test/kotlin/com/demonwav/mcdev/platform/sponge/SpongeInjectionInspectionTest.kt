@@ -21,6 +21,21 @@ class SpongeInjectionInspectionTest : BaseSpongeTest() {
         runWriteAction { createdResourceFiles.forEach { it.virtualFile.delete(this) } }
     }
 
+    fun `test primitive injection`() {
+        doTest("""
+package test;
+
+import com.google.inject.Inject;
+import org.spongepowered.api.plugin.Plugin;
+
+@Plugin(id = "a-plugin")
+public class ASpongePlugin {
+    @Inject
+    private <error descr="Primitive types cannot be injected by Sponge.">int</error> number;
+}
+""")
+    }
+
     fun `test uninjectable type`() {
         doTest("""
 package test;

@@ -31,6 +31,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiModifierListOwner
+import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiVariable
 import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.createSmartPointer
@@ -75,6 +76,15 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
 
         private fun checkInjection(variable: PsiVariable, annotationsOwner: PsiModifierListOwner) {
             val typeElement = variable.typeElement ?: return
+            if (variable.type is PsiPrimitiveType) {
+                holder.registerProblem(
+                    typeElement,
+                    "Primitive types cannot be injected by Sponge.",
+                    ProblemHighlightType.GENERIC_ERROR
+                )
+                return
+            }
+
             val classType = variable.type as? PsiClassReferenceType ?: return
             val name = classType.fullQualifiedName ?: return
 
