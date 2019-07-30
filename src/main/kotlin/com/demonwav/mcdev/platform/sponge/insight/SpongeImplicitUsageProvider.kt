@@ -1,6 +1,5 @@
 package com.demonwav.mcdev.platform.sponge.insight
 
-import com.demonwav.mcdev.platform.sponge.util.SpongeConstants
 import com.demonwav.mcdev.platform.sponge.util.isInSpongePluginClass
 import com.demonwav.mcdev.platform.sponge.util.isInjected
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider
@@ -22,7 +21,7 @@ class SpongeImplicitUsageProvider : ImplicitUsageProvider {
     }
 
     private fun isPluginClassInjectedField(element: PsiElement, optionalSensitive: Boolean): Boolean {
-        if (element is PsiField && element.isInSpongePluginClass() && element.hasAnnotation(SpongeConstants.INJECT_ANNOTATION)) {
+        if (element is PsiField && element.isInSpongePluginClass()) {
             return isInjected(element, optionalSensitive)
         }
 
@@ -30,7 +29,7 @@ class SpongeImplicitUsageProvider : ImplicitUsageProvider {
     }
 
     private fun isPluginClassInjectedSetter(element: PsiElement): Boolean {
-        if (element is PsiMethod && element.isInSpongePluginClass() && element.hasAnnotation(SpongeConstants.INJECT_ANNOTATION)) {
+        if (element is PsiMethod && element.isInSpongePluginClass()) {
             return isInjected(element, false)
         }
 
