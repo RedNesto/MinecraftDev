@@ -42,7 +42,9 @@ abstract class BaseSpongeTest : BaseMinecraftTest(PlatformType.SPONGE) {
     override fun tearDown() {
         library?.let { l ->
             ModuleRootModificationUtil.updateModel(module) { model ->
-                model.removeOrderEntry(model.findLibraryOrderEntry(l) ?: throw IllegalStateException("Library not found"))
+                model.removeOrderEntry(
+                    model.findLibraryOrderEntry(l) ?: throw IllegalStateException("Library not found")
+                )
             }
 
             runWriteTask {
