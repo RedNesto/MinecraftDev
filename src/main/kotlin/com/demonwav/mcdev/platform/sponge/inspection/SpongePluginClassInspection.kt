@@ -55,7 +55,6 @@ class SpongePluginClassInspection : AbstractBaseJavaLocalInspectionTool() {
                 return
             }
 
-
             val ctorInjectAnnos = aClass.constructors.mapNotNull {
                 val annotation = it.getAnnotation(SpongeConstants.INJECT_ANNOTATION) ?: return@mapNotNull null
                 it to annotation

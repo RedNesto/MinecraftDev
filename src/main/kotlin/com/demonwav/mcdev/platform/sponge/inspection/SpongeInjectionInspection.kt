@@ -291,7 +291,8 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
         )
     }
 
-    class RemoveAnnotationParameters(val annotation: PsiAnnotation, val txt: String) : LocalQuickFixOnPsiElement(annotation) {
+    class RemoveAnnotationParameters(val annotation: PsiAnnotation, val txt: String) :
+        LocalQuickFixOnPsiElement(annotation) {
 
         override fun getFamilyName(): String = name
 
@@ -327,7 +328,8 @@ class SpongeInjectionInspection : AbstractBaseJavaLocalInspectionTool() {
 
         override fun invoke(project: Project, file: PsiFile, startElement: PsiElement, endElement: PsiElement) {
             val newRef = JavaPsiFacade.getElementFactory(project).createReferenceFromText(
-                "ninja.leaping.configurate.loader.ConfigurationLoader<ninja.leaping.configurate.commented.CommentedConfigurationNode>",
+                "ninja.leaping.configurate.loader.ConfigurationLoader" +
+                    "<ninja.leaping.configurate.commented.CommentedConfigurationNode>",
                 startElement
             )
             startElement.replace(newRef)
