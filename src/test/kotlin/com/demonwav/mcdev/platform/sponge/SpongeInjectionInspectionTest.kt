@@ -10,28 +10,32 @@
 
 package com.demonwav.mcdev.platform.sponge
 
+import com.demonwav.mcdev.framework.EdtInterceptor
 import com.demonwav.mcdev.platform.sponge.inspection.SpongeInjectionInspection
-import com.intellij.openapi.application.runWriteAction
 import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(EdtInterceptor::class)
+@DisplayName("Sponge Plugin Class Injection Inspection Tests")
 class SpongeInjectionInspectionTest : BaseSpongeTest() {
 
     private fun doTest(@Language("JAVA") code: String, vararg resourceFiles: String) {
         buildProject {
             src {
                 java("test/ASpongePlugin.java", code)
+                resourceFiles.forEach { file(it, "", "", true) }
             }
         }
 
-        val createdResourceFiles = resourceFiles.map { myFixture.addFileToProject(it, "") }
-
-        myFixture.enableInspections(SpongeInjectionInspection::class.java)
-        myFixture.checkHighlighting(false, false, false)
-
-        runWriteAction { createdResourceFiles.forEach { it.virtualFile.delete(this) } }
+        fixture.enableInspections(SpongeInjectionInspection::class.java)
+        fixture.checkHighlighting(false, false, false)
     }
 
-    fun `test primitive injection`() {
+    @Test
+    @DisplayName("Primitive Injection Test")
+    fun primitiveInjectionTest() {
         doTest("""
 package test;
 
@@ -46,7 +50,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test field uninjectable type`() {
+    @Test
+    @DisplayName("Field Uninjectable Type Type")
+    fun uninjectableFieldTypeTest() {
         doTest("""
 package test;
 
@@ -61,7 +67,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test constructor uninjectable type`() {
+    @Test
+    @DisplayName("Constructor Uninjectable Type Test")
+    fun constructorUninjectableTypeTest() {
         doTest("""
 package test;
 
@@ -80,7 +88,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test constructor optional injection`() {
+    @Test
+    @DisplayName("Constructor Optional Injection Test")
+    fun constructorOptionalInjectionTest() {
         doTest("""
 package test;
 
@@ -100,7 +110,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test method uninjectable type`() {
+    @Test
+    @DisplayName("Method Uninjectable Type Test")
+    fun methodUninjectableTypeTest() {
         doTest("""
 package test;
 
@@ -119,7 +131,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test injected Asset without AssetId`() {
+    @Test
+    @DisplayName("Injected Asset Without AssetId Test")
+    fun injectedAssetWithoutAssetIdTest() {
         doTest("""
 package test;
 
@@ -135,7 +149,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test absent asset`() {
+    @Test
+    @DisplayName("Absent Asset Test")
+    fun absentAssetTest() {
         doTest("""
 package test;
 
@@ -153,7 +169,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test asset is a directory`() {
+    @Test
+    @DisplayName("Asset Is A Directory Test")
+    fun assetIsADirectoryTest() {
         doTest("""
 package test;
 
@@ -171,7 +189,9 @@ public class ASpongePlugin {
 """, "assets/a-plugin/dir/an_asset.txt")
     }
 
-    fun `test path injection with @ConfigDir and @DefaultConfig`() {
+    @Test
+    @DisplayName("Path Injection With @ConfigDir and @DefaultConfig Test")
+    fun pathInjectionWithConfigDirAndDefaultConfigTest() {
         doTest("""
 package test;
 
@@ -192,7 +212,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test path injection without @ConfigDir`() {
+    @Test
+    @DisplayName("Path Injection Without @ConfigDir Test")
+    fun pathInjectionWithoutConfigDirTest() {
         doTest("""
 package test;
 
@@ -209,7 +231,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test invalid @DefaultConfig usage`() {
+    @Test
+    @DisplayName("Invalid @DefaultConfig Usage Test")
+    fun invalidDefaultConfigUsageTest() {
         doTest("""
 package test;
 
@@ -227,7 +251,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test @ConfigDir on ConfigurationLoader`() {
+    @Test
+    @DisplayName("@ConfigDir On ConfigurationLoader Test")
+    fun configDirOnConfigurationLoaderTest() {
         doTest("""
 package test;
 
@@ -248,7 +274,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test ConfigurationLoader not annotated with @DefaultConfig`() {
+    @Test
+    @DisplayName("ConfigurationLoader Not Annotated With @DefaultConfig Test")
+    fun configurationLoaderNotAnnotatedWithDefaultConfigTest() {
         doTest("""
 package test;
 
@@ -266,7 +294,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test ConfigurationLoader generic not CommentedConfigurationNode`() {
+    @Test
+    @DisplayName("ConfigurationLoader Generic Not CommentedConfigurationNode Test")
+    fun configurationLoaderGenericNotCommentedConfigurationNodeTest() {
         doTest("""
 package test;
 

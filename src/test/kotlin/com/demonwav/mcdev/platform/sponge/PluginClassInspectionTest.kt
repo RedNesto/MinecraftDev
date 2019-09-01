@@ -10,9 +10,15 @@
 
 package com.demonwav.mcdev.platform.sponge
 
+import com.demonwav.mcdev.framework.EdtInterceptor
 import com.demonwav.mcdev.platform.sponge.inspection.SpongePluginClassInspection
 import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(EdtInterceptor::class)
+@DisplayName("Sponge Plugin Class Inspection Tests")
 class PluginClassInspectionTest : BaseSpongeTest() {
 
     private fun doTest(@Language("JAVA") code: String) {
@@ -22,11 +28,13 @@ class PluginClassInspectionTest : BaseSpongeTest() {
             }
         }
 
-        myFixture.enableInspections(SpongePluginClassInspection::class.java)
-        myFixture.checkHighlighting(false, false, false)
+        fixture.enableInspections(SpongePluginClassInspection::class.java)
+        fixture.checkHighlighting(false, false, false)
     }
 
-    fun `test invalid plugin id`() {
+    @Test
+    @DisplayName("Invalid Plugin Id Test")
+    fun invalidPluginIdTest() {
         doTest("""
 package test;
 
@@ -40,7 +48,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test no empty constructor`() {
+    @Test
+    @DisplayName("No Empty Constructor Test")
+    fun noEmptyConstructorTest() {
         doTest("""
 package test;
 
@@ -52,7 +62,9 @@ public class <error descr="Plugin class must have an empty constructor or an @In
 """)
     }
 
-    fun `test private constructor`() {
+    @Test
+    @DisplayName("Private Constructor Test")
+    fun privateConstructorTest() {
         doTest("""
 package test;
 
@@ -66,7 +78,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test private constructor with injected constructor`() {
+    @Test
+    @DisplayName("Private Constructor With Injected Constructor Test")
+    fun privateConstructorWithInjectedConstructorTest() {
         doTest("""
 package test;
 
@@ -86,7 +100,9 @@ public class ASpongePlugin {
 """)
     }
 
-    fun `test no private constructor with injected constructor`() {
+    @Test
+    @DisplayName("No Private Constructor With Injected Constructor Test")
+    fun noPrivateConstructorWithInjectedConstructorTest() {
         doTest("""
 package test;
 

@@ -17,14 +17,15 @@ import com.demonwav.mcdev.util.runWriteTask
 import com.intellij.openapi.roots.ModuleRootModificationUtil
 import com.intellij.openapi.roots.libraries.Library
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 
 abstract class BaseSpongeTest : BaseMinecraftTest(PlatformType.SPONGE) {
 
     private var library: Library? = null
 
-    override fun setUp() {
-        super.setUp()
-
+    @BeforeEach
+    fun initSponge() {
         runWriteTask {
             library = createLibrary(project, "spongeapi")
         }
@@ -39,7 +40,8 @@ abstract class BaseSpongeTest : BaseMinecraftTest(PlatformType.SPONGE) {
         }
     }
 
-    override fun tearDown() {
+    @AfterEach
+    fun cleanupSponge() {
         library?.let { l ->
             ModuleRootModificationUtil.updateModel(module) { model ->
                 model.removeOrderEntry(
@@ -55,7 +57,5 @@ abstract class BaseSpongeTest : BaseMinecraftTest(PlatformType.SPONGE) {
                 }
             }
         }
-
-        super.tearDown()
     }
 }
