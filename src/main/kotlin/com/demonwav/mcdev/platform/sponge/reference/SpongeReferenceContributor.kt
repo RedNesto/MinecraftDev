@@ -24,6 +24,9 @@ class SpongeReferenceContributor : PsiReferenceContributor() {
                 .insideAnnotationAttribute(SpongeConstants.GETTER_ANNOTATION), GetterEventListenerReferenceResolver)
 
         registrar.registerReferenceProvider(PsiJavaPatterns.or(
+            // @Plugin(String id)
+            PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+                .insideAnnotationAttribute(SpongeConstants.PLUGIN_ANNOTATION, "id"),
             // @Dependency(String id)
             PsiJavaPatterns.psiLiteral(StandardPatterns.string())
                 .insideAnnotationAttribute(SpongeConstants.DEPENDENCY_ANNOTATION, "id"),
