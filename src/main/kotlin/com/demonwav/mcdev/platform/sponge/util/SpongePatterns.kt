@@ -22,6 +22,8 @@ object SpongePatterns {
     /** `@Plugin(String id)` */
     val PLUGIN_ANNOTATION_ID = PsiJavaPatterns.psiLiteral(StandardPatterns.string())
         .insideAnnotationAttribute(SpongeConstants.PLUGIN_ANNOTATION, "id")!!
+    val PLUGIN_ANNOTATION_AUTHORS = PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+        .insideAnnotationAttribute(SpongeConstants.PLUGIN_ANNOTATION, "authors")!!
     /** `@Dependency(String id)` */
     val DEPENDENCY_ANNOTATION_ID = PsiJavaPatterns.psiLiteral(StandardPatterns.string())
         .insideAnnotationAttribute(SpongeConstants.DEPENDENCY_ANNOTATION, "id")!!
@@ -54,4 +56,6 @@ object SpongePatterns {
         PLUGIN_MANAGER_IS_LOADED_ARG,
         GAME_REGISTRY_GET_ALL_FOR_ARG0
     )
+
+    val PLUGIN_ID_LITERALS = PsiJavaPatterns.or(PLUGIN_ANNOTATION_ID, PLUGIN_ID_USAGES)
 }
