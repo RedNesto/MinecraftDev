@@ -1,3 +1,13 @@
+/*
+ * Minecraft Dev for IntelliJ
+ *
+ * https://minecraftdev.org
+ *
+ * Copyright (c) 2019 minecraft-dev
+ *
+ * MIT License
+ */
+
 package com.demonwav.mcdev.platform.sponge.reference
 
 import com.demonwav.mcdev.platform.sponge.util.SpongeConstants
@@ -77,24 +87,26 @@ object SpongePluginIdReferenceResolver : PsiReferenceProvider() {
             }.toTypedArray()
         }
     }
+
+    fun findAttributeValueDeclaringPluginId(pluginId: String, context: PsiElement): PsiAnnotationMemberValue? {
+        val references = getPluginAnnotationReferences(context) ?: return null
+        return references.mapFirstNotNull { ref ->
+            val pluginAnno = ref.element.parentOfType<PsiAnnotation>() ?: return@mapFirstNotNull null
+            val idAttribute = pluginAnno.findAttributeValue("id") ?: return@mapFirstNotNull null
+            if (idAttribute.constantStringValue == pluginId) {
+                return@mapFirstNotNull idAttribute
+            }
+
+            return@mapFirstNotNull null
+        }
+    }
+
+    fun isValidPluginId(pluginId: String): Boolean = pluginId.matches(ID_REGEX)
 }
 
 private fun collectSpongePluginIdDeclarations(context: PsiElement): List<PsiAnnotationMemberValue> {
     val references = getPluginAnnotationReferences(context) ?: return emptyList()
     return references.mapNotNull { it.element.parentOfType<PsiAnnotation>()?.findAttributeValue("id") }
-}
-
-private fun findAttributeValueDeclaringPluginId(pluginId: String, context: PsiElement): PsiAnnotationMemberValue? {
-    val references = getPluginAnnotationReferences(context) ?: return null
-    return references.mapFirstNotNull { ref ->
-        val pluginAnno = ref.element.parentOfType<PsiAnnotation>() ?: return@mapFirstNotNull null
-        val idAttribute = pluginAnno.findAttributeValue("id") ?: return@mapFirstNotNull null
-        if (idAttribute.constantStringValue == pluginId) {
-            return@mapFirstNotNull idAttribute
-        }
-
-        return@mapFirstNotNull null
-    }
 }
 
 private fun getPluginAnnotationReferences(context: PsiElement): Query<PsiReference>? {
@@ -106,8 +118,6 @@ private fun getPluginAnnotationReferences(context: PsiElement): Query<PsiReferen
     ) ?: return null
     return ReferencesSearch.search(pluginAnnoClass)
 }
-
-private fun isValidPluginId(pluginId: String): Boolean = pluginId.matches(ID_REGEX)
 
 // Replace by constants from SpongeConstants once https://github.com/minecraft-dev/MinecraftDev/pull/641 is merged
 private val ID_REGEX = "^[a-z][a-z0-9-_]{1,63}$".toRegex()

@@ -184,6 +184,13 @@
                          level="ERROR"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.sponge.inspection.SpongeInvalidGetterTargetInspection"/>
+        <localInspection displayName="Plugin id usages issues"
+                         groupName="Minecraft Sponge"
+                         language="JAVA"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         hasStaticDescription="true"
+                         implementationClass="com.demonwav.mcdev.platform.sponge.inspection.SpongePluginIdUsagesInspection"/>
         <localInspection displayName="Parameter's type is not assignable to its @Getter method return type"
                          groupName="Minecraft Sponge"
                          language="JAVA"
