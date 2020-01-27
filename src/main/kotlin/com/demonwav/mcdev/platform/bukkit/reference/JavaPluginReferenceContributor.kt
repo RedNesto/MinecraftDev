@@ -17,7 +17,11 @@ import com.demonwav.mcdev.platform.bukkit.SpigotModuleType
 import com.demonwav.mcdev.platform.bukkit.util.BukkitConstants
 import com.demonwav.mcdev.util.constantStringValue
 import com.demonwav.mcdev.util.findModule
+import com.intellij.codeInsight.completion.PrioritizedLookupElement
+import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.configurationStore.serializeObjectInto
 import com.intellij.openapi.fileEditor.FileDocumentManager
+import com.intellij.openapi.project.Project
 import com.intellij.patterns.PsiJavaPatterns
 import com.intellij.patterns.StandardPatterns
 import com.intellij.psi.PsiDocumentManager
@@ -27,11 +31,14 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.PsiReferenceContributor
 import com.intellij.psi.PsiReferenceProvider
 import com.intellij.psi.PsiReferenceRegistrar
+import com.intellij.psi.search.FilenameIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ArrayUtil
 import com.intellij.util.ProcessingContext
 import org.jetbrains.yaml.YAMLUtil
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLMapping
+import java.util.Locale
 
 class JavaPluginReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -40,7 +47,15 @@ class JavaPluginReferenceContributor : PsiReferenceContributor() {
             .definedInClass(BukkitConstants.JAVA_PLUGIN)
         val getCommandNameLiteral = PsiJavaPatterns.psiLiteral(StandardPatterns.string())
             .methodCallParameter(0, getCommandMethod)
-        registrar.registerReferenceProvider(getCommandNameLiteral, PluginCommands)
+
+        val serverGetPluginCommandMethod = PsiJavaPatterns.psiMethod()
+            .withName("getPluginCommand")
+            .definedInClass(BukkitConstants.SERVER)
+        val getPluginCommandNameLiteral = PsiJavaPatterns.psiLiteral(StandardPatterns.string())
+            .methodCallParameter(0, serverGetPluginCommandMethod)
+
+        val allPluginCommandLiterals = StandardPatterns.or(getCommandNameLiteral, getPluginCommandNameLiteral)
+        registrar.registerReferenceProvider(allPluginCommandLiterals, PluginCommands)
     }
 }
 
@@ -51,14 +66,16 @@ private object PluginCommands : PsiReferenceProvider() {
 
 class BukkitPluginCommandReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element, false) {
     override fun resolve(): PsiElement? {
-        val command = element.constantStringValue ?: return null
+        val originalLiteral = element.constantStringValue ?: return null
+        val commandAlias = originalLiteral.toLowerCase(Locale.ENGLISH).substringAfter(':')
         val manifestFile = findManifestFile(this.element) ?: return null
-        return YAMLUtil.getQualifiedKeyInFile(manifestFile, "commands", command)
+        return YAMLUtil.getQualifiedKeyInFile(manifestFile, "commands", commandAlias)
     }
 
     override fun getVariants(): Array<Any> {
-        val manifest = findManifestFile(element) ?: return ArrayUtil.EMPTY_OBJECT_ARRAY
-        return collectCommands(manifest).toTypedArray()
+        val module = element.findModule() ?: return ArrayUtil.EMPTY_OBJECT_ARRAY
+        val scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
+        return collectAllCommandsVariants(element.project, scope, true)
     }
 }
 
@@ -74,5 +91,36 @@ private fun findManifestFile(context: PsiElement): YAMLFile? {
 private fun collectCommands(file: YAMLFile): List<String> {
     val commandsNode = YAMLUtil.getQualifiedKeyInFile(file, "commands") ?: return emptyList()
     val commandsMapping = commandsNode.value as? YAMLMapping ?: return emptyList()
-    return commandsMapping.keyValues.map { it.keyText }
+    return commandsMapping.keyValues.map { it.keyText.toLowerCase(Locale.ENGLISH) }
+}
+
+private fun collectCommandsVariants(file: YAMLFile, includeNamespaces: Boolean = false): Array<Any> {
+    val declaredCommands = collectCommands(file)
+    if (declaredCommands.isEmpty()) {
+        return ArrayUtil.EMPTY_OBJECT_ARRAY
+    }
+
+    val variants = declaredCommands.toMutableList<Any>()
+    if (includeNamespaces) {
+        val namespace = YAMLUtil.getValue(file, "name")?.second?.toLowerCase(Locale.ENGLISH)
+        if (namespace != null) {
+            declaredCommands.mapTo(variants) { alias ->
+                // Give qualified commands a low priority because they are rarely used (from my experience at least)
+                PrioritizedLookupElement.withPriority(LookupElementBuilder.create("$namespace:$alias"), -1.0)
+            }
+        }
+    }
+    return variants.toTypedArray()
+}
+
+private fun collectAllCommandsVariants(
+    project: Project,
+    scope: GlobalSearchScope,
+    includeNamespaces: Boolean = false
+): Array<Any> {
+    val variants = mutableListOf<Any>()
+    FilenameIndex.getFilesByName(project, "plugin.yml", scope).forEach { file ->
+        if (file is YAMLFile) variants.addAll(collectCommandsVariants(file, includeNamespaces))
+    }
+    return variants.toTypedArray()
 }
