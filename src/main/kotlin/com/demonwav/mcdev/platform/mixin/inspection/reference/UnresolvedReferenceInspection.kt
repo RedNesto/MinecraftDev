@@ -11,10 +11,14 @@
 package com.demonwav.mcdev.platform.mixin.inspection.reference
 
 import com.demonwav.mcdev.platform.mixin.inspection.MixinInspection
+import com.demonwav.mcdev.platform.mixin.reference.AccessorReference
 import com.demonwav.mcdev.platform.mixin.reference.InjectionPointType
+import com.demonwav.mcdev.platform.mixin.reference.InvokerReference
 import com.demonwav.mcdev.platform.mixin.reference.MethodReference
 import com.demonwav.mcdev.platform.mixin.reference.MixinReference
 import com.demonwav.mcdev.platform.mixin.reference.target.TargetReference
+import com.demonwav.mcdev.platform.mixin.util.MixinConstants.Annotations.ACCESSOR
+import com.demonwav.mcdev.platform.mixin.util.MixinConstants.Annotations.INVOKER
 import com.demonwav.mcdev.platform.mixin.util.isWithinDynamicMixin
 import com.demonwav.mcdev.util.annotationFromNameValuePair
 import com.demonwav.mcdev.util.constantStringValue
@@ -37,15 +41,19 @@ class UnresolvedReferenceInspection : MixinInspection() {
 
         override fun visitNameValuePair(pair: PsiNameValuePair) {
             val name = pair.name ?: PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME
+            val qualifiedName = pair.annotationFromNameValuePair?.qualifiedName ?: return
             val resolver: MixinReference = when (name) {
                 "method" -> MethodReference
                 "target" -> TargetReference
-                "value" -> InjectionPointType
+                "value" -> when (qualifiedName) {
+                    ACCESSOR -> AccessorReference
+                    INVOKER -> InvokerReference
+                    else -> InjectionPointType
+                }
                 else -> return
             }
 
             // Check if valid annotation
-            val qualifiedName = pair.annotationFromNameValuePair?.qualifiedName ?: return
             if (!resolver.isValidAnnotation(qualifiedName)) {
                 return
             }

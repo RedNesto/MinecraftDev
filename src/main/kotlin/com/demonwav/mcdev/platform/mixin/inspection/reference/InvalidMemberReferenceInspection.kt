@@ -11,9 +11,13 @@
 package com.demonwav.mcdev.platform.mixin.inspection.reference
 
 import com.demonwav.mcdev.platform.mixin.inspection.MixinInspection
+import com.demonwav.mcdev.platform.mixin.reference.AccessorReference
+import com.demonwav.mcdev.platform.mixin.reference.InvokerReference
 import com.demonwav.mcdev.platform.mixin.reference.MethodReference
 import com.demonwav.mcdev.platform.mixin.reference.MixinReference
 import com.demonwav.mcdev.platform.mixin.reference.target.TargetReference
+import com.demonwav.mcdev.platform.mixin.util.MixinConstants.Annotations.ACCESSOR
+import com.demonwav.mcdev.platform.mixin.util.MixinConstants.Annotations.INVOKER
 import com.demonwav.mcdev.platform.mixin.util.MixinMemberReference
 import com.demonwav.mcdev.util.annotationFromNameValuePair
 import com.demonwav.mcdev.util.constantStringValue
@@ -36,15 +40,20 @@ class InvalidMemberReferenceInspection : MixinInspection() {
 
         override fun visitNameValuePair(pair: PsiNameValuePair) {
             val name = pair.name ?: return
+            val annotation = pair.annotationFromNameValuePair ?: return
 
             val resolver: MixinReference = when (name) {
                 "method" -> MethodReference
                 "target" -> TargetReference
+                "value" -> when (annotation.qualifiedName) {
+                    ACCESSOR -> AccessorReference
+                    INVOKER -> InvokerReference
+                    else -> return
+                }
                 else -> return
             }
 
             // Check if valid annotation
-            val annotation = pair.annotationFromNameValuePair ?: return
             if (!resolver.isValidAnnotation(annotation.qualifiedName!!)) {
                 return
             }

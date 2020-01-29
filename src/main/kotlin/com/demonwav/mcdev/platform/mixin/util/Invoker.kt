@@ -31,9 +31,9 @@ fun PsiMember.findInvokerTarget(): PsiMember? {
 
 @Contract(pure = true)
 fun resolveInvokerTarget(
-        invoker: PsiAnnotation,
-        targetClasses: Collection<PsiClass>,
-        member: PsiMember
+    invoker: PsiAnnotation,
+    targetClasses: Collection<PsiClass>,
+    member: PsiMember
 ): PsiMember? {
     val value = invoker.findDeclaredAttributeValue("value")?.constantStringValue ?: return null
     return when (member) {

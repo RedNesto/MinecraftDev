@@ -32,9 +32,9 @@ fun PsiMember.findAccessorTarget(): PsiMember? {
 
 @Contract(pure = true)
 fun resolveAccessorTarget(
-        accessor: PsiAnnotation,
-        targetClasses: Collection<PsiClass>,
-        member: PsiMember
+    accessor: PsiAnnotation,
+    targetClasses: Collection<PsiClass>,
+    member: PsiMember
 ): PsiMember? {
     val value = accessor.findDeclaredAttributeValue("value")?.constantStringValue ?: return null
     return when (member) {

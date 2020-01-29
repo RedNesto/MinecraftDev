@@ -46,8 +46,8 @@ class AccessorTargetInspection : MixinInspection() {
                 val value = annotation.findDeclaredAttributeValue("value")?.constantStringValue
 
                 holder.registerProblem(
-                        annotation, "Cannot resolve member '${value}' in target class",
-                        RemoveAnnotationQuickFix(annotation, member)
+                    annotation, "Cannot resolve member '$value' in target class",
+                    RemoveAnnotationQuickFix(annotation, member)
                 )
             }
         }
