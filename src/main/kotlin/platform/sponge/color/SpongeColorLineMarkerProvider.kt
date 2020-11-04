@@ -16,21 +16,23 @@ import com.intellij.codeInsight.daemon.GutterIconNavigationHandler
 import com.intellij.codeInsight.daemon.LineMarkerInfo
 import com.intellij.codeInsight.daemon.LineMarkerProvider
 import com.intellij.codeInsight.daemon.NavigateAction
+import com.intellij.psi.JVMElementFactories
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiExpressionList
-import com.intellij.psi.PsiLiteralExpression
-import com.intellij.psi.PsiNewExpression
-import com.intellij.psi.impl.source.tree.JavaElementType
 import com.intellij.psi.util.PsiEditorUtil
 import com.intellij.ui.ColorChooser
 import java.awt.Color
+import org.jetbrains.uast.UCallExpression
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UIdentifier
+import org.jetbrains.uast.ULiteralExpression
+import org.jetbrains.uast.toUElementOfType
 
 class SpongeColorLineMarkerProvider : LineMarkerProvider {
 
     override fun getLineMarkerInfo(element: PsiElement): LineMarkerInfo<*>? {
-        val pair = element.findColor() ?: return null
+        val (color, workElement) = element.toUElementOfType<UIdentifier>()?.findColor() ?: return null
 
-        val info = SpongeColorInfo(element, pair.first, pair.second)
+        val info = SpongeColorInfo(element, color, workElement)
         NavigateAction.setNavigateAction(info, "Change Color", null)
 
         return info
@@ -39,7 +41,7 @@ class SpongeColorLineMarkerProvider : LineMarkerProvider {
     private class SpongeColorInfo(
         element: PsiElement,
         color: Color,
-        workElement: PsiElement
+        workElement: UElement
     ) : ColorLineMarkerProvider.ColorInfo(
         element,
         color,
@@ -48,18 +50,20 @@ class SpongeColorLineMarkerProvider : LineMarkerProvider {
                 return@handler
             }
 
+            if (JVMElementFactories.getFactory(element.language, element.project) == null) {
+                // The setColor methods used here require a JVMElementFactory. Unfortunately the Kotlin plugin does not
+                // implement it yet. It is better to not display the color chooser at all than deceiving users after
+                // after they chose a color.
+                return@handler
+            }
+
             val editor = PsiEditorUtil.findEditor(element) ?: return@handler
 
             val c = ColorChooser.chooseColor(editor.component, "Choose Color", color, false)
             if (c != null) {
                 when (workElement) {
-                    is PsiLiteralExpression -> workElement.setColor(c.rgb and 0xFFFFFF)
-                    is PsiExpressionList -> workElement.setColor(c.red, c.green, c.blue)
-                    is PsiNewExpression -> {
-                        val list = workElement.getNode().findChildByType(JavaElementType.EXPRESSION_LIST)
-                            as PsiExpressionList?
-                        list?.setColor(c.red, c.green, c.blue)
-                    }
+                    is ULiteralExpression -> workElement.setColor(c.rgb and 0xFFFFFF)
+                    is UCallExpression -> workElement.setColor(c.red, c.green, c.blue)
                 }
             }
         }

@@ -25,6 +25,9 @@ import com.intellij.util.ui.ColorIcon
 import com.intellij.util.ui.ColorsIcon
 import java.awt.Color
 import javax.swing.Icon
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UIdentifier
+import org.jetbrains.uast.toUElementOfType
 
 class ColorLineMarkerProvider : LineMarkerProvider {
 
@@ -33,7 +36,8 @@ class ColorLineMarkerProvider : LineMarkerProvider {
             return null
         }
 
-        val info = element.findColor { map, chosen -> ColorInfo(element, chosen.value, map, chosen.key) }
+        val identifier = element.toUElementOfType<UIdentifier>() ?: return null
+        val info = identifier.findColor { map, chosen -> ColorInfo(element, chosen.value, map, chosen.key, identifier) }
         if (info != null) {
             NavigateAction.setNavigateAction(info, "Change Color", null)
         }
@@ -44,7 +48,13 @@ class ColorLineMarkerProvider : LineMarkerProvider {
     open class ColorInfo : MergeableLineMarkerInfo<PsiElement> {
         protected val color: Color
 
-        constructor(element: PsiElement, color: Color, map: Map<String, Color>, colorName: String) : super(
+        constructor(
+            element: PsiElement,
+            color: Color,
+            map: Map<String, Color>,
+            colorName: String,
+            workElement: UElement
+        ) : super(
             element,
             element.textRange,
             ColorIcon(12, color),
@@ -58,8 +68,8 @@ class ColorLineMarkerProvider : LineMarkerProvider {
 
                 val picker = ColorPicker(map, editor.component)
                 val newColor = picker.showDialog()
-                if (newColor != null) {
-                    element.setColor(newColor)
+                if (newColor != null && map[newColor] != color) {
+                    workElement.setColor(newColor)
                 }
             },
             GutterIconRenderer.Alignment.RIGHT,
