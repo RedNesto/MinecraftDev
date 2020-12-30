@@ -40,7 +40,7 @@ fun <T> UElement.findColor(function: (Map<String, Color>, Map.Entry<String, Colo
             val colorClass = entry.key.substringBeforeLast('.')
             val colorName = entry.key.substringAfterLast('.')
             if (colorClass.startsWith(type.canonicalText) && colorName == expression.resolvedName ?: continue) {
-                return function(map, entry)
+                return function(map.filterKeys { key -> key.startsWith(colorClass) }, entry)
             }
         }
     }
