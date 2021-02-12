@@ -15,6 +15,8 @@ import com.demonwav.mcdev.insight.ColorAnnotator
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
+import org.jetbrains.uast.UIdentifier
+import org.jetbrains.uast.toUElementOfType
 
 class SpongeColorAnnotator : Annotator {
 
@@ -23,7 +25,7 @@ class SpongeColorAnnotator : Annotator {
             return
         }
 
-        val pair = element.findColor() ?: return
+        val pair = element.toUElementOfType<UIdentifier>()?.findColor() ?: return
 
         ColorAnnotator.setColorAnnotator(pair.first, element, holder)
     }
