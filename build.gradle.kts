@@ -107,6 +107,7 @@ intellij {
         "maven",
         "gradle",
         "Groovy",
+        "yaml",
         // needed dependencies for unit tests
         "properties",
         "junit",

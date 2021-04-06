@@ -14,6 +14,7 @@
     <depends>org.jetbrains.idea.maven</depends>
     <depends>com.intellij.gradle</depends>
     <depends>org.intellij.groovy</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="toml-support.xml">org.toml.lang</depends>
 
     <id>com.demonwav.minecraft-dev</id>
@@ -164,6 +165,8 @@
         <library.presentationProvider implementation="com.demonwav.mcdev.platform.bukkit.framework.BukkitPresentationProvider" />
         <library.presentationProvider implementation="com.demonwav.mcdev.platform.bukkit.framework.SpigotPresentationProvider" />
         <library.presentationProvider implementation="com.demonwav.mcdev.platform.bukkit.framework.PaperPresentationProvider" />
+
+        <psi.referenceContributor implementation="com.demonwav.mcdev.platform.bukkit.reference.PluginManifestReferenceContributor" />
         <!--endregion-->
 
         <!--region SPONGE-->
@@ -344,6 +347,13 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.bukkit.inspection.BukkitListenerImplementedInspection"/>
+        <localInspection displayName="Bukkit plugin manifest validation"
+                         groupName="Bukkit"
+                         language="yaml"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         hasStaticDescription="true"
+                         implementationClass="com.demonwav.mcdev.platform.bukkit.inspection.BukkitManifestValidationInspection"/>
         <!--endregion-->
 
         <!--region SPONGE INSPECTIONS-->
