@@ -19,6 +19,7 @@ object BukkitConstants {
     const val EVENT_CLASS = "org.bukkit.event.Event"
     const val PLUGIN = "org.bukkit.plugin.Plugin"
     const val JAVA_PLUGIN = "org.bukkit.plugin.java.JavaPlugin"
+    const val SERVER = "org.bukkit.Server"
     const val EVENT_ISCANCELLED_METHOD_NAME = "isCancelled"
     const val CANCELLABLE_CLASS = "org.bukkit.event.Cancellable"
 }

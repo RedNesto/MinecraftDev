@@ -167,6 +167,7 @@
         <library.presentationProvider implementation="com.demonwav.mcdev.platform.bukkit.framework.PaperPresentationProvider" />
 
         <psi.referenceContributor implementation="com.demonwav.mcdev.platform.bukkit.reference.PluginManifestReferenceContributor" />
+        <psi.referenceContributor implementation="com.demonwav.mcdev.platform.bukkit.reference.JavaPluginReferenceContributor" />
         <!--endregion-->
 
         <!--region SPONGE-->
