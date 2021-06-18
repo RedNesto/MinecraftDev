@@ -104,7 +104,7 @@ class MinecraftModuleBuilder : JavaModuleBuilder() {
         modulesProvider: ModulesProvider
     ): Array<ModuleWizardStep> {
         return arrayOf(
-            BuildSystemWizardStep(creator),
+            BuildSystemWizardStep(wizardContext, creator),
             BukkitProjectSettingsWizard(creator),
             SpongeProjectSettingsWizard(creator),
             ForgeProjectSettingsWizard(creator),
