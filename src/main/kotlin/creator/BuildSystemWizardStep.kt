@@ -10,6 +10,7 @@
 
 package com.demonwav.mcdev.creator
 
+import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.creator.buildsystem.BuildSystem
 import com.demonwav.mcdev.creator.buildsystem.BuildSystemType
 import com.intellij.ide.util.projectWizard.ModuleWizardStep
@@ -52,7 +53,7 @@ class BuildSystemWizardStep(
                 textField(groupIdProperty)
                     .withValidationOnApply { validateGroupId() }
                     .withValidationOnInput { validateGroupId() }
-                    .comment(ExternalSystemBundle.message("external.system.mavenized.structure.wizard.group.id.help"))
+                    .comment(MCDevBundle.message("creator.groupid.description"), 120)
                     .focused()
             }
             row(ExternalSystemBundle.message("external.system.mavenized.structure.wizard.artifact.id.label")) {
@@ -74,17 +75,19 @@ class BuildSystemWizardStep(
             row {
                 right {
                     val buildSystemBox = comboBox(buildSystemModel, buildSystemProperty)
-                    buildSystemModel.addListDataListener(object : ListDataListener {
-                        override fun intervalAdded(e: ListDataEvent?) = update()
+                    buildSystemModel.addListDataListener(
+                        object : ListDataListener {
+                            override fun intervalAdded(e: ListDataEvent?) = update()
 
-                        override fun intervalRemoved(e: ListDataEvent?) = update()
+                            override fun intervalRemoved(e: ListDataEvent?) = update()
 
-                        override fun contentsChanged(e: ListDataEvent?) = update()
+                            override fun contentsChanged(e: ListDataEvent?) = update()
 
-                        private fun update() {
-                            buildSystemBox.enabled(buildSystemModel.size > 1)
+                            private fun update() {
+                                buildSystemBox.enabled(buildSystemModel.size > 1)
+                            }
                         }
-                    })
+                    )
                 }
             }
         }.apply { registerValidators(context.disposable) }
@@ -93,6 +96,8 @@ class BuildSystemWizardStep(
     override fun getPreferredFocusedComponent() = contentPanel.preferredFocusedComponent
 
     override fun getComponent() = contentPanel
+
+    override fun getHelpId(): String = "com.demonwav.minecraft-dev.create"
 
     override fun updateStep() {
         buildSystemModel.removeAllElements()
