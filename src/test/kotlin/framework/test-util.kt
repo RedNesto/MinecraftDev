@@ -33,7 +33,7 @@ typealias ProjectBuilderFunc =
     ProjectBuilder.(path: String, code: String, configure: Boolean, allowAst: Boolean) -> VirtualFile
 
 val mockJdk by lazy {
-    val path = findLibraryPath("mockJDK")
+    val path = findLibraryPath("mock-jdk")
     val rtFile = StandardFileSystems.local().findFileByPath(path)!!
     val rt = JarFileSystem.getInstance().getRootByLocal(rtFile)!!
     val home = rtFile.parent!!

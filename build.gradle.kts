@@ -58,11 +58,32 @@ val gradleToolingExtensionJar = tasks.register<Jar>(gradleToolingExtensionSource
 
 repositories {
     mavenCentral()
-    maven("https://wav.jfrog.io/artifactory/mcdev/")
     maven("https://repo.spongepowered.org/maven")
     maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
     maven("https://repo.gradle.org/gradle/libs-releases-local/")
     maven("https://maven.extracraftx.com")
+    val repoUser = project.findProperty("mcdev.repo.user") as? String ?: System.getenv("USERNAME")
+    val repoToken = project.findProperty("mcdev.repo.token") as? String ?: System.getenv("TOKEN")
+    if (repoUser.isNullOrBlank() || repoToken.isNullOrBlank()) {
+        maven("https://wav.jfrog.io/artifactory/mcdev/")
+    } else {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/minecraft-dev/MinecraftDev")
+            credentials {
+                username = repoUser
+                password = repoToken
+            }
+            content {
+                includeModule("com.demonwav.mcdev", "all-types-nbt")
+                includeModule("org.jetbrains.idea", "mock-jdk")
+                includeModule("org.jetbrains.idea", "mockJDK")
+                includeModule("org.jetbrains.idea", "light-psi-all")
+                includeModule("org.jetbrains.idea", "jflex")
+                includeModule("org.jetbrains.idea", "grammar-kit")
+            }
+        }
+    }
 }
 
 dependencies {
