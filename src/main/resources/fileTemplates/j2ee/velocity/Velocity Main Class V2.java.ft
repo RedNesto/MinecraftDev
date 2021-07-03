@@ -1,15 +1,15 @@
-package ${PACKAGE};
+package ${config.pluginPackage};
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.lifecycle.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
-#if(${HAS_DEPENDENCIES})
+#if(!${config.dependencies.empty})
 import com.velocitypowered.api.plugin.Dependency;
 #end
 import com.velocitypowered.api.plugin.Plugin;
 import org.slf4j.Logger;
 
-public class ${CLASS_NAME} {
+public class ${config.mainClassName} {
 
     @Inject private Logger logger;
 

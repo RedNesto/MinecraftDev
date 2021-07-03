@@ -26,8 +26,11 @@ import java.nio.file.Path
 class SpongeProjectConfig : ProjectConfig(), MavenCreator, GradleCreator {
 
     lateinit var mainClass: String
+    val pluginPackage get() = mainClass.substringBeforeLast('.')
+    val mainClassName get() = mainClass.substringAfterLast('.')
 
     var spongeApiVersion = ""
+    val simplifiedApiVersion get() = spongeApiVersion.removeSuffix("-SNAPSHOT")
 
     override var type = PlatformType.SPONGE
 

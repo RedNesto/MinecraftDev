@@ -10,6 +10,7 @@
 
 package com.demonwav.mcdev.platform
 
+import com.demonwav.mcdev.creator.buildsystem.BuildSystem
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.openapi.project.Project
 
@@ -24,6 +25,8 @@ abstract class BaseTemplate {
 
         val allProperties = manager.defaultProperties.toMutableMap()
         properties?.let { prop -> allProperties.putAll(prop) }
+
+        (allProperties["build"] as? BuildSystem)?.let { allProperties["pluginId"] = (it.parent ?: it).artifactId }
 
         return template.getText(allProperties)
     }

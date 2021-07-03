@@ -12,31 +12,31 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":${COMMON_PROJECT_NAME}"))
+    implementation(project(":${build.commonModuleName}"))
 }
 
 sponge {
-    apiVersion("${SPONGEAPI_VERSION}")
-    plugin("${PLUGIN_ID}") {
+    apiVersion("${config.simplifiedApiVersion}")
+    plugin("${pluginId}") {
         loader(PluginLoaders.JAVA_PLAIN)
-        displayName("${PLUGIN_NAME}")
-        mainClass("${MAIN_CLASS}")
-        #if (${DESCRIPTION})
-        description("${DESCRIPTION}")
+        displayName("${config.pluginName}")
+        mainClass("${config.mainClass}")
+        #if (${config.description})
+        description("${config.description}")
         #else
         description("My plugin description")
         #end
         links {
-            #if (${WEBSITE})
-            homepage("${WEBSITE}")
+            #if (${config.website})
+            homepage("${config.website}")
             #else
             // homepage("https://spongepowered.org")
             #end
             // source("https://spongepowered.org/source")
             // issues("https://spongepowered.org/issues")
         }
-        #foreach (${AUTHOR} in ${AUTHORS})
-        contributor("${AUTHOR}") {
+        #foreach (${author} in ${config.authors})
+        contributor("${author}") {
             description("Author")
         }
         #end
@@ -44,8 +44,8 @@ sponge {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
         }
-        #foreach (${DEPENDENCY} in ${DEPENDENCIES})
-        dependency("${DEPEDENCY}") {
+        #foreach (${dependency} in ${config.dependencies})
+        dependency("${dependency}") {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
         }
@@ -77,7 +77,7 @@ tasks.withType(AbstractArchiveTask::class).configureEach {
 tasks {
     shadowJar {
         dependencies {
-            include(dependency(":${COMMON_PROJECT_NAME}"))
+            include(dependency(":${build.commonModuleName}"))
         }
     }
 

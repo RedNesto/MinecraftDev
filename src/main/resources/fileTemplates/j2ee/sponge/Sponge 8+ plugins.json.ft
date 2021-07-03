@@ -2,24 +2,24 @@
   "plugins": [
     {
       "loader": "java_plain",
-      "id": "${PLUGIN_ID}",
-      "name": "${PLUGIN_NAME}",
-      "version": "${VERSION_PLACEHOLDER}",
-      "main-class": "${MAIN_CLASS}",
-      #if (${DESCRIPTION})
-      "description": "${DESCRIPTION}",
+      "id": "${pluginId}",
+      "name": "${config.pluginName}",
+      "version": "${version}",
+      "main-class": "${config.mainClass}",
+      #if (${config.description})
+      "description": "${config.description}",
       #else
       "description": "My plugin description",
       #end
       "links": {
-        #if (${WEBSITE})
-        "homepage": "https://spongepowered.org"
+        #if (${config.website})
+        "homepage": "${config.website}"
         #end
       },
       "contributors": [
-        #foreach (${AUTHOR} in ${AUTHORS})
+        #foreach (${author} in ${config.authors})
         {
-          "name": "${AUTHOR}",
+          "name": "${author}",
           "description": "Author"
         }
         #end
@@ -27,13 +27,13 @@
       "dependencies": [
         {
           "id": "spongeapi",
-          "version": "${SPONGEAPI_VERSION}",
+          "version": "${config.simplifiedApiVersion}",
           "load-order": "AFTER",
           "optional": false
-        #foreach (${DEPENDENCY} in ${DEPENDENCIES})
+        #foreach (${dependency} in ${config.dependencies})
         },
         {
-          "id": "${DEPENDENCY}",
+          "id": "${dependency}",
           "load-order": "AFTER",
           "optional": false
         #end

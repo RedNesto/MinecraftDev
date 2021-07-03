@@ -9,12 +9,12 @@ repositories {
 }
 
 dependencies {
-    compile project(':${COMMON_PROJECT_NAME}')
+    compile project(':${build.commonModuleName}')
 }
 
 shadowJar {
     dependencies {
-        include(dependency(':${COMMON_PROJECT_NAME}'))
+        include(dependency(':${build.commonModuleName}'))
     }
 }
 

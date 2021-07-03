@@ -1,15 +1,15 @@
-package ${PACKAGE};
+package ${config.pluginPackage};
 
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.Listener;
-#if(${HAS_DEPENDENCIES})
+#if(!${config.dependencies.empty})
 import org.spongepowered.api.plugin.Dependency;
 #end
 import org.spongepowered.api.plugin.Plugin;
 
-public class ${CLASS_NAME} {
+public class ${config.mainClassName} {
 
     @Inject private Logger logger;
 

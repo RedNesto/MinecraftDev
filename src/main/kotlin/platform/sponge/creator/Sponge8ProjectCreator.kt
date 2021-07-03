@@ -44,9 +44,9 @@ sealed class Sponge8ProjectCreator<T : BuildSystem>(
     }
 
     protected fun setupMainClassStep(): BasicJavaClassStep {
-        return createJavaClassStep(config.mainClass) { packageName, className ->
+        return createJavaClassStep(config.mainClass) { _, _ ->
             val pluginId = (buildSystem.parent ?: buildSystem).artifactId
-            Sponge8Template.applyMainClass(project, pluginId, packageName, className)
+            Sponge8Template.applyMainClass(project, buildSystem, config)
         }
     }
 }
@@ -127,7 +127,7 @@ class Sponge8GradleCreator(
             config
         )
         val propText = Sponge8Template.applyGradleProp(project)
-        val settingsText = Sponge8Template.applySettingsGradle(project, buildSystem.artifactId)
+        val settingsText = Sponge8Template.applySettingsGradle(project, buildSystem, config)
         val files = GradleFiles(buildText, propText, settingsText)
 
         return listOf(

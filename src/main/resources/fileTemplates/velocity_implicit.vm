@@ -1,0 +1,22 @@
+#* @implicitly included *#
+
+#* @vtlvariable name="build" type="com.demonwav.mcdev.creator.buildsystem.BuildSystem" *#
+#* @vtlvariable name="pluginId" type="java.lang.String" *#
+
+#* @vtlvariable name="includes" type="java.lang.String" file="j2ee/multi/Multi-Module Base settings.gradle.ft" *#
+
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge build.gradle.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge Main Class.java.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge settings.gradle.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge Submodule build.gradle.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge 8+ build.gradle.kts.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge 8+ Main Class.java.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge 8+ plugins.json.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge 8+ settings.gradle.kts.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.sponge.creator.SpongeProjectConfig" file="j2ee/sponge/Sponge 8+ Submodule build.gradle.kts.ft" *#
+
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.velocity.creator.VelocityProjectConfig" file="j2ee/velocity/Velocity build.gradle.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.velocity.creator.VelocityProjectConfig" file="j2ee/velocity/Velocity Main Class.java.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.velocity.creator.VelocityProjectConfig" file="j2ee/velocity/Velocity Main Class V2.java.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.velocity.creator.VelocityProjectConfig" file="j2ee/velocity/Velocity settings.gradle.ft" *#
+#* @vtlvariable name="config" type="com.demonwav.mcdev.platform.velocity.creator.VelocityProjectConfig" file="j2ee/velocity/Velocity Submodule build.gradle.ft" *#

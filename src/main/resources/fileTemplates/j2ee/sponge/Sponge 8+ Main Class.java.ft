@@ -1,4 +1,4 @@
-package ${PACKAGE};
+package ${config.pluginPackage};
 
 import com.google.inject.Inject;
 import net.kyori.adventure.identity.Identity;
@@ -25,14 +25,14 @@ import org.spongepowered.plugin.jvm.Plugin;
  *
  * <p>All methods are optional -- some common event registrations are included as a jumping-off point.</p>
  */
-@Plugin("${PLUGIN_ID}")
-public class ${CLASS_NAME} {
+@Plugin("${pluginId}")
+public class ${config.mainClassName} {
 
     private final PluginContainer container;
     private final Logger logger;
 
     @Inject
-    ${CLASS_NAME}(final PluginContainer container, final Logger logger) {
+    ${config.mainClassName}(final PluginContainer container, final Logger logger) {
         this.container = container;
         this.logger = logger;
     }
@@ -40,7 +40,7 @@ public class ${CLASS_NAME} {
     @Listener
     public void onConstructPlugin(final ConstructPluginEvent event) {
         // Perform any one-time setup
-        this.logger.info("Constructing ${PLUGIN_ID}");
+        this.logger.info("Constructing ${pluginId}");
     }
 
     @Listener
@@ -62,7 +62,7 @@ public class ${CLASS_NAME} {
         final Parameter.Value<String> nameParam = Parameter.string().key("name").build();
         event.register(this.container, Command.builder()
             .addParameter(nameParam)
-            .permission("${PLUGIN_ID}.command.greet")
+            .permission("${pluginId}.command.greet")
             .executor(ctx -> {
                 final String name = ctx.requireOne(nameParam);
                 ctx.sendMessage(Identity.nil(), LinearComponents.linear(

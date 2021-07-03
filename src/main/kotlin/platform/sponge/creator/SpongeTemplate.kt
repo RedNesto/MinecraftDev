@@ -32,31 +32,13 @@ object SpongeTemplate : BaseTemplate() {
         return project.applyTemplate(SPONGE_SUBMODULE_POM_TEMPLATE, BasicMavenStep.pluginVersions)
     }
 
-    fun applyMainClass(
-        project: Project,
-        packageName: String,
-        className: String,
-        hasDependencies: Boolean
-    ): String {
-        val props = mutableMapOf(
-            "PACKAGE" to packageName,
-            "CLASS_NAME" to className
-        )
-
-        if (hasDependencies) {
-            props["HAS_DEPENDENCIES"] = "true"
-        }
-
+    fun applyMainClass(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE_MAIN_CLASS_TEMPLATE, props)
     }
 
-    fun applyBuildGradle(project: Project, buildSystem: BuildSystem): String {
-        val props = mapOf(
-            "GROUP_ID" to buildSystem.groupId,
-            "PLUGIN_ID" to buildSystem.artifactId,
-            "PLUGIN_VERSION" to buildSystem.version
-        )
-
+    fun applyBuildGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE_BUILD_GRADLE_TEMPLATE, props)
     }
 
@@ -64,20 +46,13 @@ object SpongeTemplate : BaseTemplate() {
         return project.applyTemplate(SPONGE_GRADLE_PROPERTIES_TEMPLATE)
     }
 
-    fun applySettingsGradle(project: Project, artifactId: String): String {
-        val props = mapOf(
-            "ARTIFACT_ID" to artifactId
-        )
-
+    fun applySettingsGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE_SETTINGS_GRADLE_TEMPLATE, props)
     }
 
-    fun applySubBuildGradle(project: Project, buildSystem: BuildSystem): String {
-        val props = mapOf(
-            "COMMON_PROJECT_NAME" to buildSystem.commonModuleName,
-            "PLUGIN_ID" to buildSystem.artifactId
-        )
-
+    fun applySubBuildGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE_SUBMODULE_BUILD_GRADLE_TEMPLATE, props)
     }
 }

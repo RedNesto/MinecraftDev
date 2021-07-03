@@ -8,8 +8,8 @@ buildscript {
     }
 }
 
-group = '${GROUP_ID}'
-version = '${PLUGIN_VERSION}'
+group = '${build.groupId}'
+version = '${build.version}'
 
 subprojects {
     apply plugin: 'java'

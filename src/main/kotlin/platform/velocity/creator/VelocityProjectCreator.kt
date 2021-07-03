@@ -55,9 +55,9 @@ sealed class VelocityProjectCreator<T : BuildSystem>(
     }
 
     protected fun setupMainClassSteps(): Pair<CreatorStep, CreatorStep> {
-        val mainClassStep = createJavaClassStep(config.mainClass) { packageName, className ->
+        val mainClassStep = createJavaClassStep(config.mainClass) { _, _ ->
             val version = SemanticVersion.parse(config.velocityApiVersion)
-            VelocityTemplate.applyMainClass(project, packageName, className, config.hasDependencies(), version)
+            VelocityTemplate.applyMainClass(project, buildSystem, config, version)
         }
 
         return mainClassStep to VelocityMainClassModifyStep(project, buildSystem, config.mainClass, config)
@@ -118,9 +118,9 @@ class VelocityGradleCreator(
     override fun getSingleModuleSteps(): Iterable<CreatorStep> {
         val (mainClassStep, modifyStep) = setupMainClassSteps()
 
-        val buildText = VelocityTemplate.applyBuildGradle(project, buildSystem)
+        val buildText = VelocityTemplate.applyBuildGradle(project, buildSystem, config)
         val propText = VelocityTemplate.applyGradleProp(project)
-        val settingsText = VelocityTemplate.applySettingsGradle(project, buildSystem.artifactId)
+        val settingsText = VelocityTemplate.applySettingsGradle(project, buildSystem, config)
         val files = GradleFiles(buildText, propText, settingsText)
 
         return listOf(
@@ -138,7 +138,7 @@ class VelocityGradleCreator(
     override fun getMultiModuleSteps(projectBaseDir: Path): Iterable<CreatorStep> {
         val (mainClassStep, modifyStep) = setupMainClassSteps()
 
-        val buildText = VelocityTemplate.applySubBuildGradle(project, buildSystem)
+        val buildText = VelocityTemplate.applySubBuildGradle(project, buildSystem, config)
         val files = GradleFiles(buildText, null, null)
 
         return listOf(

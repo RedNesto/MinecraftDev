@@ -23,6 +23,8 @@ import java.nio.file.Path
 class VelocityProjectConfig : ProjectConfig(), MavenCreator, GradleCreator {
 
     lateinit var mainClass: String
+    val pluginPackage get() = mainClass.substringBeforeLast('.')
+    val mainClassName get() = mainClass.substringAfterLast('.')
 
     var velocityApiVersion = ""
 

@@ -32,11 +32,7 @@ object BuildSystemTemplate : BaseTemplate() {
     }
 
     fun applyBuildGradle(project: Project, buildSystem: BuildSystem): String {
-        val props = mapOf(
-            "GROUP_ID" to buildSystem.groupId,
-            "PLUGIN_VERSION" to buildSystem.version
-        )
-
+        val props = mapOf("build" to buildSystem)
         return project.applyTemplate(MULTI_MODULE_BUILD_GRADLE_TEMPLATE, props)
     }
 
@@ -45,11 +41,7 @@ object BuildSystemTemplate : BaseTemplate() {
     }
 
     fun applySettingsGradle(project: Project, buildSystem: BuildSystem, subProjects: List<String>): String {
-        val props = mapOf(
-            "ARTIFACT_ID" to buildSystem.artifactId,
-            "INCLUDES" to subProjects.joinToString(", ") { "'$it'" }
-        )
-
+        val props = mapOf("build" to buildSystem, "includes" to subProjects.joinToString(", ") { "'$it'" })
         return project.applyTemplate(MULTI_MODULE_SETTINGS_GRADLE_TEMPLATE, props)
     }
 

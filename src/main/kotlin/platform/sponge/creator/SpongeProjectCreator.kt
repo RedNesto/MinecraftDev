@@ -56,8 +56,8 @@ sealed class SpongeProjectCreator<T : BuildSystem>(
     }
 
     protected fun setupMainClassSteps(): Pair<CreatorStep, CreatorStep> {
-        val mainClassStep = createJavaClassStep(config.mainClass) { packageName, className ->
-            SpongeTemplate.applyMainClass(project, packageName, className, config.hasDependencies())
+        val mainClassStep = createJavaClassStep(config.mainClass) { _, _ ->
+            SpongeTemplate.applyMainClass(project, buildSystem, config)
         }
 
         val (packageName, className) = splitPackage(config.mainClass)
@@ -121,9 +121,9 @@ class SpongeGradleCreator(
     override fun getSingleModuleSteps(): Iterable<CreatorStep> {
         val (mainClassStep, modifyStep) = setupMainClassSteps()
 
-        val buildText = SpongeTemplate.applyBuildGradle(project, buildSystem)
+        val buildText = SpongeTemplate.applyBuildGradle(project, buildSystem, config)
         val propText = SpongeTemplate.applyGradleProp(project)
-        val settingsText = SpongeTemplate.applySettingsGradle(project, buildSystem.artifactId)
+        val settingsText = SpongeTemplate.applySettingsGradle(project, buildSystem, config)
         val files = GradleFiles(buildText, propText, settingsText)
 
         return listOf(
@@ -141,7 +141,7 @@ class SpongeGradleCreator(
     override fun getMultiModuleSteps(projectBaseDir: Path): Iterable<CreatorStep> {
         val (mainClassStep, modifyStep) = setupMainClassSteps()
 
-        val buildText = SpongeTemplate.applySubBuildGradle(project, buildSystem)
+        val buildText = SpongeTemplate.applySubBuildGradle(project, buildSystem, config)
         val files = GradleFiles(buildText, null, null)
 
         return listOf(

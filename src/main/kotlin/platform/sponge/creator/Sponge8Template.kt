@@ -22,60 +22,18 @@ import com.intellij.openapi.project.Project
 
 object Sponge8Template : BaseTemplate() {
 
-    fun applyMainClass(
-        project: Project,
-        pluginId: String,
-        packageName: String,
-        className: String
-    ): String {
-        val props = mutableMapOf(
-            "PLUGIN_ID" to pluginId,
-            "PACKAGE" to packageName,
-            "CLASS_NAME" to className
-        )
-
+    fun applyMainClass(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE8_MAIN_CLASS_TEMPLATE, props)
     }
 
-    fun applyPluginsJson(
-        project: Project,
-        buildSystem: BuildSystem,
-        config: SpongeProjectConfig
-    ): String {
-        val props = mutableMapOf(
-            "PLUGIN_ID" to buildSystem.artifactId,
-            "VERSION_PLACEHOLDER" to "\${version}",
-            "SPONGEAPI_VERSION" to config.spongeApiVersion,
-            "PLUGIN_NAME" to config.pluginName,
-            "MAIN_CLASS" to config.mainClass,
-            "DESCRIPTION" to config.description,
-            "WEBSITE" to config.website,
-            "AUTHORS" to config.authors,
-            "DEPENDENCIES" to config.dependencies
-        )
-
+    fun applyPluginsJson(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE8_PLUGINS_JSON_TEMPLATE, props)
     }
 
-    fun applyBuildGradle(
-        project: Project,
-        buildSystem: BuildSystem,
-        config: SpongeProjectConfig
-    ): String {
-        val props = mutableMapOf(
-            "GROUP_ID" to buildSystem.groupId,
-            "PLUGIN_ID" to buildSystem.artifactId,
-            "PLUGIN_VERSION" to buildSystem.version,
-            // SpongeGradle 1.1.0 adds the -SNAPSHOT suffix itself
-            "SPONGEAPI_VERSION" to config.spongeApiVersion.removeSuffix("-SNAPSHOT"),
-            "PLUGIN_NAME" to config.pluginName,
-            "MAIN_CLASS" to config.mainClass,
-            "DESCRIPTION" to config.description,
-            "WEBSITE" to config.website,
-            "AUTHORS" to config.authors,
-            "DEPENDENCIES" to config.dependencies
-        )
-
+    fun applyBuildGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE8_BUILD_GRADLE_TEMPLATE, props)
     }
 
@@ -83,32 +41,13 @@ object Sponge8Template : BaseTemplate() {
         return project.applyTemplate(SPONGE8_GRADLE_PROPERTIES_TEMPLATE)
     }
 
-    fun applySettingsGradle(project: Project, artifactId: String): String {
-        val props = mapOf(
-            "ARTIFACT_ID" to artifactId
-        )
-
+    fun applySettingsGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE8_SETTINGS_GRADLE_TEMPLATE, props)
     }
 
-    fun applySubBuildGradle(
-        project: Project,
-        buildSystem: BuildSystem,
-        config: SpongeProjectConfig
-    ): String {
-        val props = mutableMapOf(
-            "PLUGIN_ID" to buildSystem.parentOrError.artifactId,
-            // SpongeGradle 1.1.0 adds the -SNAPSHOT suffix itself
-            "SPONGEAPI_VERSION" to config.spongeApiVersion.removeSuffix("-SNAPSHOT"),
-            "PLUGIN_NAME" to config.pluginName,
-            "MAIN_CLASS" to config.mainClass,
-            "DESCRIPTION" to config.description,
-            "WEBSITE" to config.website,
-            "AUTHORS" to config.authors,
-            "DEPENDENCIES" to config.dependencies,
-            "COMMON_PROJECT_NAME" to buildSystem.commonModuleName
-        )
-
+    fun applySubBuildGradle(project: Project, buildSystem: BuildSystem, config: SpongeProjectConfig): String {
+        val props = mutableMapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(SPONGE8_SUBMODULE_BUILD_GRADLE_TEMPLATE, props)
     }
 }

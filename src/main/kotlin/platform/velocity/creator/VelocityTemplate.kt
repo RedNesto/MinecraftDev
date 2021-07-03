@@ -36,53 +36,34 @@ object VelocityTemplate : BaseTemplate() {
 
     fun applyMainClass(
         project: Project,
-        packageName: String,
-        className: String,
-        hasDependencies: Boolean,
+        buildSystem: BuildSystem,
+        config: VelocityProjectConfig,
         version: SemanticVersion
     ): String {
-        val props = mutableMapOf(
-            "PACKAGE" to packageName,
-            "CLASS_NAME" to className
-        )
-
-        if (hasDependencies) {
-            props["HAS_DEPENDENCIES"] = "true"
-        }
-
         val template = if (version < VELOCITY_2_SNAPSHOT) {
             VELOCITY_MAIN_CLASS_TEMPLATE
         } else {
             VELOCITY_MAIN_CLASS_V2_TEMPLATE
         }
 
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(template, props)
     }
 
-    fun applyBuildGradle(project: Project, buildSystem: BuildSystem): String {
-        val props = mapOf(
-            "GROUP_ID" to buildSystem.groupId,
-            "PLUGIN_ID" to buildSystem.artifactId,
-            "PLUGIN_VERSION" to buildSystem.version
-        )
-
+    fun applyBuildGradle(project: Project, buildSystem: BuildSystem, config: VelocityProjectConfig): String {
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(VELOCITY_BUILD_GRADLE_TEMPLATE, props)
     }
 
     fun applyGradleProp(project: Project): String = project.applyTemplate(VELOCITY_GRADLE_PROPERTIES_TEMPLATE)
 
-    fun applySettingsGradle(project: Project, artifactId: String): String {
-        val props = mapOf("ARTIFACT_ID" to artifactId)
-
+    fun applySettingsGradle(project: Project, buildSystem: BuildSystem, config: VelocityProjectConfig): String {
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(VELOCITY_SETTINGS_GRADLE_TEMPLATE, props)
     }
 
-    fun applySubBuildGradle(project: Project, buildSystem: BuildSystem): String {
-        val props = mapOf(
-            "COMMON_PROJECT_NAME" to buildSystem.commonModuleName,
-            "PLUGIN_ID" to buildSystem.artifactId
-        )
-
+    fun applySubBuildGradle(project: Project, buildSystem: BuildSystem, config: VelocityProjectConfig): String {
+        val props = mapOf("build" to buildSystem, "config" to config)
         return project.applyTemplate(VELOCITY_SUBMODULE_BUILD_GRADLE_TEMPLATE, props)
     }
 }

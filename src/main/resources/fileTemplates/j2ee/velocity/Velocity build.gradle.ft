@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = '${GROUP_ID}'
-version = '${PLUGIN_VERSION}'
+group = '${build.groupId}'
+version = '${build.version}'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
