@@ -18,6 +18,7 @@ import javax.swing.JPanel
 
 class ConfigurePluginUpdatesForm {
     lateinit var channelBox: JComboBox<String>
+    lateinit var channelsListingInProgressIcon: AsyncProcessIcon
     lateinit var checkForUpdatesNowButton: JButton
     lateinit var panel: JPanel
     lateinit var updateCheckInProgressIcon: AsyncProcessIcon
@@ -26,6 +27,7 @@ class ConfigurePluginUpdatesForm {
     lateinit var installButton: JButton
 
     private fun createUIComponents() {
+        channelsListingInProgressIcon = AsyncProcessIcon("Channels listing in progress")
         updateCheckInProgressIcon = AsyncProcessIcon("Plugin update check in progress")
     }
 }

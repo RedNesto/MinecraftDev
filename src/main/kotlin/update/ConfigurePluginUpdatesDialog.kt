@@ -10,6 +10,9 @@
 
 package com.demonwav.mcdev.update
 
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.updateSettings.impl.UpdateSettings
 import java.io.IOException
@@ -22,13 +25,12 @@ class ConfigurePluginUpdatesDialog : DialogWrapper(true) {
 
     init {
         title = "Configure Minecraft Development Plugin Updates"
+        form.channelsListingInProgressIcon.suspend()
+        form.channelsListingInProgressIcon.setPaintPassiveIcon(false)
         form.updateCheckInProgressIcon.suspend()
         form.updateCheckInProgressIcon.setPaintPassiveIcon(false)
 
         form.channelBox.addItem("Stable")
-        for (channels in Channels.values()) {
-            form.channelBox.addItem(channels.title)
-        }
 
         form.checkForUpdatesNowButton.addActionListener {
             saveSettings()
@@ -45,8 +47,7 @@ class ConfigurePluginUpdatesDialog : DialogWrapper(true) {
                         form.installButton.isVisible = true
                         "A new version (${pluginUpdateStatus.pluginDescriptor.version}) is available"
                     }
-                    else -> // CheckFailed
-                        "Update check failed: " + (pluginUpdateStatus as PluginUpdateStatus.CheckFailed).message
+                    is PluginUpdateStatus.CheckFailed -> "Update check failed: " + pluginUpdateStatus.message
                 }
 
                 false
@@ -67,14 +68,25 @@ class ConfigurePluginUpdatesDialog : DialogWrapper(true) {
 
         form.channelBox.addActionListener { resetUpdateStatus() }
 
-        Channels.values().forEachIndexed { i, channel ->
-            if (channel.hasChannel()) {
-                initialSelectedChannel = i + 1
-                return@forEachIndexed
+        form.channelsListingInProgressIcon.resume()
+        ApplicationManager.getApplication().executeOnPooledThread {
+            val otherChannels = Channel.otherChannels
+            otherChannels.forEachIndexed { i, channel ->
+                if (channel.hasChannel()) {
+                    initialSelectedChannel = i + 1
+                    return@forEachIndexed
+                }
+            }
+            invokeLater(ModalityState.any()) {
+                for (channels in otherChannels) {
+                    form.channelBox.addItem(channels.title)
+                }
+                form.channelBox.isEnabled = true
+                form.channelBox.selectedIndex = initialSelectedChannel
+                form.channelsListingInProgressIcon.suspend()
             }
         }
 
-        form.channelBox.selectedIndex = initialSelectedChannel
         init()
     }
 
@@ -82,12 +94,10 @@ class ConfigurePluginUpdatesDialog : DialogWrapper(true) {
 
     private fun saveSelectedChannel(index: Int) {
         val hosts = UpdateSettings.getInstance().storedPluginHosts
-        for (channel in Channels.values()) {
-            hosts.remove(channel.url)
-        }
+        hosts.removeIf(Channel.urlRegex::matches)
 
         if (index != 0) {
-            val channel = Channels.values()[index - 1]
+            val channel = Channel.otherChannels[index - 1]
             hosts.add(channel.url)
         }
     }
