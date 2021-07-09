@@ -19,6 +19,7 @@ import com.demonwav.mcdev.platform.PlatformType
 import com.demonwav.mcdev.platform.fabric.EntryPoint
 import com.demonwav.mcdev.platform.forge.inspections.sideonly.Side
 import com.demonwav.mcdev.util.License
+import com.demonwav.mcdev.util.MinecraftVersions
 import com.demonwav.mcdev.util.SemanticVersion
 import com.intellij.openapi.module.Module
 import java.nio.file.Path
@@ -61,6 +62,7 @@ class FabricProjectConfig : ProjectConfig(), GradleCreator {
     }
 
     override fun configureRootGradle(rootDirectory: Path, buildSystem: GradleBuildSystem) {
-        buildSystem.gradleVersion = gradleVersion
+        buildSystem.gradleVersion =
+            if (semanticMcVersion >= MinecraftVersions.MC1_17) SemanticVersion.release(7, 1, 1) else gradleVersion
     }
 }

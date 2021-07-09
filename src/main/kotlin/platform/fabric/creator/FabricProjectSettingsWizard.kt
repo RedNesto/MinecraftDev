@@ -21,6 +21,7 @@ import com.demonwav.mcdev.platform.fabric.EntryPoint
 import com.demonwav.mcdev.platform.fabric.util.FabricConstants
 import com.demonwav.mcdev.platform.forge.inspections.sideonly.Side
 import com.demonwav.mcdev.util.License
+import com.demonwav.mcdev.util.MinecraftVersions
 import com.demonwav.mcdev.util.SemanticVersion
 import com.demonwav.mcdev.util.modUpdateStep
 import com.demonwav.mcdev.util.toPackageName
@@ -29,6 +30,7 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.table.JBTable
+import com.intellij.util.lang.JavaVersion
 import com.intellij.util.ui.EditableModel
 import com.intellij.util.ui.table.ComboBoxTableCellEditor
 import java.awt.event.ActionListener
@@ -236,6 +238,11 @@ class FabricProjectSettingsWizard(private val creator: MinecraftProjectCreator) 
         conf.mcVersion = mcVersion ?: ""
         val normalizedMcVersion = dataProvider?.getNormalizedMinecraftVersion(mcVersion)?.normalized
         conf.semanticMcVersion = normalizedMcVersion?.let { SemanticVersion.parse(it) } ?: SemanticVersion.release()
+        if (conf.semanticMcVersion >= MinecraftVersions.MC1_17) {
+            conf.javaVersion = JavaVersion.compose(16)
+        } else {
+            conf.javaVersion = JavaVersion.compose(8)
+        }
         val loaderVer = loaderVersion
         if (loaderVer != null) {
             conf.loaderVersion = SemanticVersion.parse(loaderVer)
