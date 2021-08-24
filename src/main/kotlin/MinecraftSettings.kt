@@ -83,9 +83,7 @@ class MinecraftSettings : PersistentStateComponent<MinecraftSettings.State> {
         ROUNDED_BOXED("Rounded Boxed", EffectType.ROUNDED_BOX),
         WAVED("Waved", EffectType.WAVE_UNDERSCORE);
 
-        override fun toString(): String {
-            return regular
-        }
+        override fun toString(): String = regular
     }
 
     companion object {
