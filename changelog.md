@@ -1,5 +1,13 @@
 # Minecraft Development for IntelliJ
 
+## [Unreleased]
+
+### Changed
+
+- Overhauled Access Transformer support:
+  - many lexing errors should now be fixed
+  - class names and member names now have their own references, replacing the custom Goto handler
+
 ## [1.8.1] - 2024-08-10
 
 ### Added
