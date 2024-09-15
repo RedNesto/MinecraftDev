@@ -1,0 +1,56 @@
+<!--
+    Minecraft Development for IntelliJ
+
+    https://mcdev.io/
+
+    Copyright (C) 2024 minecraft-dev
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, version 3.0 only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude" require-restart="true">
+
+    <id>com.demonwav.minecraft-dev</id>
+    <name>Minecraft Development</name>
+    <vendor email="kyle@denwav.dev" url="https://mcdev.io/">minecraft-dev</vendor>
+
+    <description><![CDATA[
+        Provides first-class support for every major Java Minecraft modding or plugin development platform, including:
+        <ul>
+          <li>Bukkit</li>
+          <li>Spigot</li>
+          <li>Paper</li>
+          <li>Sponge</li>
+          <li>Forge</li>
+          <li>NeoForge</li>
+          <li>Fabric</li>
+          <li>Architectury</li>
+          <li>Velocity</li>
+          <li>BungeeCord</li>
+        </ul>
+
+        Also includes additional features supporting MCP mappings and Mixins for mod development. This plugin also
+        includes a text-based NBT editor.
+    ]]></description>
+
+    <change-notes><![CDATA[
+        Please report issues to <a href="https://github.com/minecraft-dev/MinecraftDev/issues">the issue tracker</a>!
+        ]]>
+    </change-notes>
+
+    <xi:include href="mcdev-core.xml"/>
+    <depends optional="true" config-file="mcdev-kotlin.xml">org.jetbrains.kotlin</depends>
+    <depends optional="true" config-file="mcdev-toml.xml">org.toml.lang</depends>
+    <depends optional="true" config-file="mcdev-yaml.xml">org.jetbrains.plugins.yaml</depends>
+
+</idea-plugin>
