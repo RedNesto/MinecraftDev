@@ -19,15 +19,12 @@
  */
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
+    idea
+    id("org.jetbrains.intellij.platform.module")
 }
 
-rootProject.name = "MinecraftDev"
-include("obfuscation-explorer")
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include("mcdev-core", "mcdev-kotlin", "mcdev-toml", "mcdev-yaml")
-include("mixin-test-data")
-
-startParameter.warningMode = WarningMode.All
+repositories {
+    intellijPlatform {
+        defaultRepositories()
+    }
+}

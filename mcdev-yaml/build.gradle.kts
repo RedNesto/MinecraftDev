@@ -19,15 +19,25 @@
  */
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
+    `mcdev-common`
+    `mcdev-module`
+    `mcdev-test`
 }
 
-rootProject.name = "MinecraftDev"
-include("obfuscation-explorer")
+dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity(libs.versions.intellij.ide)
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+        registerMcDevDependencies()
 
-include("mcdev-core", "mcdev-kotlin", "mcdev-toml", "mcdev-yaml")
-include("mixin-test-data")
+        bundledPlugin("org.jetbrains.plugins.yaml")
 
-startParameter.warningMode = WarningMode.All
+        pluginModule(implementation(projects.mcdevCore))
+    }
+
+    testImplementation(projects.mcdevCore) {
+        capabilities {
+            requireCapability("com.demonwav.mcdev:mcdev-core-test-framework")
+        }
+    }
+}

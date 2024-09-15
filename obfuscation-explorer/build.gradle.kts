@@ -21,6 +21,7 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
+    `mcdev-common`
     `mcdev-core`
     `mcdev-parsing`
     `mcdev-publishing`
@@ -74,10 +75,7 @@ val generateTinyV2Parser by parser("TinyV2Parser", "io/mcdev/obfex/formats/tinyv
 val generateProGuardLexer by lexer("ProGuardLexer", "io/mcdev/obfex/formats/proguard/gen")
 val generateProGuardParser by parser("ProGuardParser", "io/mcdev/obfex/formats/proguard/gen")
 
-val generate by tasks.registering {
-    group = "minecraft"
-    description = "Generates sources needed to compile the plugin."
-    outputs.dir(layout.buildDirectory.dir("gen"))
+tasks.generate {
     dependsOn(
         generateSrgLexer,
         generateSrgParser,
@@ -98,25 +96,4 @@ val generate by tasks.registering {
         generateProGuardLexer,
         generateProGuardParser,
     )
-}
-
-sourceSets.main { java.srcDir(generate) }
-
-// Remove gen directory on clean
-tasks.clean { delete(generate) }
-
-license {
-    tasks {
-        register("gradle") {
-            files.from(
-                fileTree(project.projectDir) {
-                    include("*.gradle.kts", "gradle.properties")
-                    exclude("**/buildSrc/**", "**/build/**")
-                }
-            )
-        }
-        register("grammars") {
-            files.from(project.fileTree("src/main/grammars"))
-        }
-    }
 }

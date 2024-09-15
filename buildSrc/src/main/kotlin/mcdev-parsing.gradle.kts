@@ -19,9 +19,13 @@
  */
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.jetbrains.gradle.ext.settings
+import org.jetbrains.gradle.ext.taskTriggers
 
 plugins {
     idea
+    id("org.jetbrains.gradle.plugin.idea-ext")
+    id("org.cadixdev.licenser")
 }
 
 val jflex: Configuration by configurations.creating
@@ -39,8 +43,33 @@ dependencies {
     grammarKit(libs.grammarKit)
 }
 
+val generate by tasks.registering {
+    group = "minecraft"
+    description = "Generates sources needed to compile the plugin."
+    outputs.dir(layout.buildDirectory.dir("gen"))
+}
+
+the<SourceSetContainer>().named("main") {
+    java.srcDir(generate)
+}
+
+// Remove gen directory on clean
+tasks.named<Delete>("clean") { delete(generate) }
+
 idea {
     module {
         generatedSourceDirs.add(file("build/gen"))
+    }
+}
+
+rootProject.idea {
+    project.settings.taskTriggers.afterSync(generate)
+}
+
+license {
+    tasks {
+        register("grammars") {
+            files.from(project.fileTree("src/main/grammars"))
+        }
     }
 }

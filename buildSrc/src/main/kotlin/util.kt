@@ -25,6 +25,7 @@ import org.gradle.kotlin.dsl.RegisteringDomainObjectDelegateProviderWithTypeAndA
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
+import org.jetbrains.intellij.platform.gradle.extensions.IntelliJPlatformDependenciesExtension
 
 typealias TaskDelegate<T> = RegisteringDomainObjectDelegateProviderWithTypeAndAction<out TaskContainer, T>
 
@@ -64,4 +65,14 @@ fun Project.parser(bnf: String, pack: String): TaskDelegate<ParserExec> {
         val grammarKit by project.configurations
         this.grammarKit.setFrom(grammarKit)
     }
+}
+
+fun IntelliJPlatformDependenciesExtension.registerMcDevDependencies() {
+    bundledPlugin("com.intellij.java")
+    bundledPlugin("org.jetbrains.idea.maven")
+    bundledPlugin("com.intellij.gradle")
+    bundledPlugin("org.intellij.groovy")
+    bundledPlugin("ByteCodeViewer")
+    bundledPlugin("org.intellij.intelliLang")
+    bundledPlugin("com.intellij.properties")
 }

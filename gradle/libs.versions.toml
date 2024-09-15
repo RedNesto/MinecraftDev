@@ -27,6 +27,7 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 intellij-plugin = { module = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin", version.ref = "intellij-plugin" }
 licenser-plugin = { module = "org.cadixdev.licenser:org.cadixdev.licenser.gradle.plugin", version.ref = "licenser" }
 changelog-plugin = { module = "org.jetbrains.changelog:org.jetbrains.changelog.gradle.plugin", version.ref = "changelog" }
+idea-ext-plugin = { module = "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "idea-ext" }
 
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 

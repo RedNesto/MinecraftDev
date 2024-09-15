@@ -44,4 +44,5 @@ dependencies {
     implementation(libs.intellij.plugin)
     implementation(libs.licenser.plugin)
     implementation(libs.changelog.plugin)
+    implementation(libs.idea.ext.plugin)
 }
