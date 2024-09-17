@@ -1,0 +1,28 @@
+<!--
+    Minecraft Development for IntelliJ
+
+    https://mcdev.io/
+
+    Copyright (C) 2024 minecraft-dev
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, version 3.0 only.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<!-- Dummy plugin.xml for the plugin to be loaded in tests -->
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+    <id>com.demonwav.minecraft-dev</id>
+    <xi:include href="/META-INF/mcdev-core.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/mcdev-kotlin.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/mcdev-toml.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/mcdev-yaml.xml" xpointer="xpointer(/idea-plugin/*)"/>
+</idea-plugin>

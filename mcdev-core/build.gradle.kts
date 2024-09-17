@@ -22,6 +22,7 @@ import org.gradle.internal.jvm.Jvm
 
 plugins {
     groovy
+    `java-test-fixtures`
     `mcdev-common`
     `mcdev-module`
     `mcdev-parsing`
@@ -43,10 +44,8 @@ val gradleToolingExtensionJar = tasks.register<Jar>(gradleToolingExtensionSource
     exclude("META-INF/plugin.xml")
 }
 
-java {
-    registerFeature("testFramework") {
-        usingSourceSet(sourceSets.test.get())
-    }
+sourceSets.named("testFixtures") {
+    kotlin.srcDir("src/testFixtures/kotlin")
 }
 
 dependencies {
@@ -79,6 +78,11 @@ dependencies {
     gradleToolingExtension(libs.groovy)
     gradleToolingExtension(libs.gradleToolingExtension)
     gradleToolingExtension(libs.annotations)
+
+    testImplementation(libs.junit.api)
+    testCompileOnly(libs.junit.vintage) // Hack to get tests to compile and run
+    testRuntimeOnly(libs.junit.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.processResources {

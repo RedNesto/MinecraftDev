@@ -23,6 +23,7 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("mcdev-common")
+    `java-test-fixtures`
 }
 
 val testLibs: Configuration by configurations.creating {
@@ -66,6 +67,11 @@ dependencies {
         }
     }
     testLibs(project(":mixin-test-data"))
+
+    testFixturesImplementation(libs.junit.api)
+    testFixturesCompileOnly(libs.junit.vintage) // Hack to get tests to compile and run
+    testFixturesRuntimeOnly(libs.junit.engine)
+    testFixturesRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {

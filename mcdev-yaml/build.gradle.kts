@@ -35,9 +35,5 @@ dependencies {
         pluginModule(implementation(projects.mcdevCore))
     }
 
-    testImplementation(projects.mcdevCore) {
-        capabilities {
-            requireCapability("com.demonwav.mcdev:mcdev-core-test-framework")
-        }
-    }
+    testImplementation(testFixtures(projects.mcdevCore))
 }

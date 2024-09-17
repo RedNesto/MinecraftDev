@@ -18,22 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    `mcdev-common`
-    `mcdev-module`
-    `mcdev-test`
-}
-
-dependencies {
-    intellijPlatform {
-        intellijIdeaCommunity(libs.versions.intellij.ide)
-
-        registerMcDevDependencies()
-
-        bundledPlugin("org.toml.lang")
-
-        pluginModule(implementation(projects.mcdevCore))
-    }
-
-    testImplementation(testFixtures(projects.mcdevCore))
-}
+// IntelliJ doesn't seem to know what the base package is in the other files without this
+// (since there aren't any other files at this root level)
+package com.demonwav.mcdev
