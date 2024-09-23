@@ -20,6 +20,7 @@
 
 plugins {
     idea
+    id("mcdev-common")
     id("org.jetbrains.intellij.platform")
 }
 
@@ -36,9 +37,6 @@ if (buildNumber != null) {
 
 intellijPlatform {
     sandboxContainer = layout.projectDirectory.dir(".sandbox")
-
-    instrumentCode = false
-    buildSearchableOptions = false
 }
 
 idea {

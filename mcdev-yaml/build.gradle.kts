@@ -19,7 +19,6 @@
  */
 
 plugins {
-    `mcdev-common`
     `mcdev-module`
     `mcdev-test`
 }

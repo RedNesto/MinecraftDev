@@ -23,7 +23,6 @@ import org.gradle.internal.jvm.Jvm
 plugins {
     groovy
     `java-test-fixtures`
-    `mcdev-common`
     `mcdev-module`
     `mcdev-parsing`
     `mcdev-test`

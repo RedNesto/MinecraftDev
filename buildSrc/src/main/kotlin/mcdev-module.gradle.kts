@@ -20,11 +20,6 @@
 
 plugins {
     idea
+    id("mcdev-common")
     id("org.jetbrains.intellij.platform.module")
-}
-
-repositories {
-    intellijPlatform {
-        defaultRepositories()
-    }
 }

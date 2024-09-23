@@ -24,7 +24,6 @@ import org.jetbrains.intellij.platform.gradle.tasks.PrepareSandboxTask
 plugins {
     id(libs.plugins.changelog.get().pluginId)
     id(libs.plugins.idea.ext.get().pluginId)
-    `mcdev-common`
     `mcdev-core`
     `mcdev-publishing`
 }

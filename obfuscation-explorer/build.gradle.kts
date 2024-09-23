@@ -21,7 +21,6 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    `mcdev-common`
     `mcdev-core`
     `mcdev-parsing`
     `mcdev-publishing`
