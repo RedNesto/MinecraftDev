@@ -101,38 +101,19 @@ tasks.processResources {
     }
 }
 
-val generateAtLexer by lexer("AtLexer", "com/demonwav/mcdev/platform/mcp/at/gen")
-val generateAtParser by parser("AtParser", "com/demonwav/mcdev/platform/mcp/at/gen")
+registerLexer("AtLexer", "com/demonwav/mcdev/platform/mcp/at/gen")
+registerParser("AtParser", "com/demonwav/mcdev/platform/mcp/at/gen")
 
-val generateAwLexer by lexer("AwLexer", "com/demonwav/mcdev/platform/mcp/aw/gen")
-val generateAwParser by parser("AwParser", "com/demonwav/mcdev/platform/mcp/aw/gen")
+registerLexer("AwLexer", "com/demonwav/mcdev/platform/mcp/aw/gen")
+registerParser("AwParser", "com/demonwav/mcdev/platform/mcp/aw/gen")
 
-val generateNbttLexer by lexer("NbttLexer", "com/demonwav/mcdev/nbt/lang/gen")
-val generateNbttParser by parser("NbttParser", "com/demonwav/mcdev/nbt/lang/gen")
+registerLexer("NbttLexer", "com/demonwav/mcdev/nbt/lang/gen")
+registerParser("NbttParser", "com/demonwav/mcdev/nbt/lang/gen")
 
-val generateLangLexer by lexer("LangLexer", "com/demonwav/mcdev/translations/lang/gen")
-val generateLangParser by parser("LangParser", "com/demonwav/mcdev/translations/lang/gen")
+registerLexer("LangLexer", "com/demonwav/mcdev/translations/lang/gen")
+registerParser("LangParser", "com/demonwav/mcdev/translations/lang/gen")
 
-val generateMEExpressionLexer by lexer("MEExpressionLexer", "com/demonwav/mcdev/platform/mixin/expression/gen")
-val generateMEExpressionParser by parser("MEExpressionParser", "com/demonwav/mcdev/platform/mixin/expression/gen")
+registerLexer("MEExpressionLexer", "com/demonwav/mcdev/platform/mixin/expression/gen")
+registerParser("MEExpressionParser", "com/demonwav/mcdev/platform/mixin/expression/gen")
 
-val generateTranslationTemplateLexer by lexer(
-    "TranslationTemplateLexer",
-    "com/demonwav/mcdev/translations/template/gen"
-)
-
-tasks.generate {
-    dependsOn(
-        generateAtLexer,
-        generateAtParser,
-        generateAwLexer,
-        generateAwParser,
-        generateNbttLexer,
-        generateNbttParser,
-        generateLangLexer,
-        generateLangParser,
-        generateMEExpressionLexer,
-        generateMEExpressionParser,
-        generateTranslationTemplateLexer,
-    )
-}
+registerLexer("TranslationTemplateLexer", "com/demonwav/mcdev/translations/template/gen")

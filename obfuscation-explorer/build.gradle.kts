@@ -47,52 +47,29 @@ dependencies {
     }
 }
 
-val generateSrgLexer by lexer("SrgLexer", "io/mcdev/obfex/formats/srg/gen")
-val generateSrgParser by parser("SrgParser", "io/mcdev/obfex/formats/srg/gen")
+registerLexer("SrgLexer", "io/mcdev/obfex/formats/srg/gen")
+registerParser("SrgParser", "io/mcdev/obfex/formats/srg/gen")
 
-val generateCSrgLexer by lexer("CSrgLexer", "io/mcdev/obfex/formats/csrg/gen")
-val generateCSrgParser by parser("CSrgParser", "io/mcdev/obfex/formats/csrg/gen")
+registerLexer("CSrgLexer", "io/mcdev/obfex/formats/csrg/gen")
+registerParser("CSrgParser", "io/mcdev/obfex/formats/csrg/gen")
 
-val generateTSrgLexer by lexer("TSrgLexer", "io/mcdev/obfex/formats/tsrg/gen")
-val generateTSrgParser by parser("TSrgParser", "io/mcdev/obfex/formats/tsrg/gen")
+registerLexer("TSrgLexer", "io/mcdev/obfex/formats/tsrg/gen")
+registerParser("TSrgParser", "io/mcdev/obfex/formats/tsrg/gen")
 
-val generateTSrg2Lexer by lexer("TSrg2Lexer", "io/mcdev/obfex/formats/tsrg2/gen")
-val generateTSrg2Parser by parser("TSrg2Parser", "io/mcdev/obfex/formats/tsrg2/gen")
+registerLexer("TSrg2Lexer", "io/mcdev/obfex/formats/tsrg2/gen")
+registerParser("TSrg2Parser", "io/mcdev/obfex/formats/tsrg2/gen")
 
-val generateJamLexer by lexer("JamLexer", "io/mcdev/obfex/formats/jam/gen")
-val generateJamParser by parser("JamParser", "io/mcdev/obfex/formats/jam/gen")
+registerLexer("JamLexer", "io/mcdev/obfex/formats/jam/gen")
+registerParser("JamParser", "io/mcdev/obfex/formats/jam/gen")
 
-val generateEnigmaLexer by lexer("EnigmaLexer", "io/mcdev/obfex/formats/enigma/gen")
-val generateEnigmaParser by parser("EnigmaParser", "io/mcdev/obfex/formats/enigma/gen")
+registerLexer("EnigmaLexer", "io/mcdev/obfex/formats/enigma/gen")
+registerParser("EnigmaParser", "io/mcdev/obfex/formats/enigma/gen")
 
-val generateTinyV1Lexer by lexer("TinyV1Lexer", "io/mcdev/obfex/formats/tinyv1/gen")
-val generateTinyV1Parser by parser("TinyV1Parser", "io/mcdev/obfex/formats/tinyv1/gen")
+registerLexer("TinyV1Lexer", "io/mcdev/obfex/formats/tinyv1/gen")
+registerParser("TinyV1Parser", "io/mcdev/obfex/formats/tinyv1/gen")
 
-val generateTinyV2Lexer by lexer("TinyV2Lexer", "io/mcdev/obfex/formats/tinyv2/gen")
-val generateTinyV2Parser by parser("TinyV2Parser", "io/mcdev/obfex/formats/tinyv2/gen")
+registerLexer("TinyV2Lexer", "io/mcdev/obfex/formats/tinyv2/gen")
+registerParser("TinyV2Parser", "io/mcdev/obfex/formats/tinyv2/gen")
 
-val generateProGuardLexer by lexer("ProGuardLexer", "io/mcdev/obfex/formats/proguard/gen")
-val generateProGuardParser by parser("ProGuardParser", "io/mcdev/obfex/formats/proguard/gen")
-
-tasks.generate {
-    dependsOn(
-        generateSrgLexer,
-        generateSrgParser,
-        generateCSrgLexer,
-        generateCSrgParser,
-        generateTSrgLexer,
-        generateTSrgParser,
-        generateTSrg2Lexer,
-        generateTSrg2Parser,
-        generateJamLexer,
-        generateJamParser,
-        generateEnigmaLexer,
-        generateEnigmaParser,
-        generateTinyV1Lexer,
-        generateTinyV1Parser,
-        generateTinyV2Lexer,
-        generateTinyV2Parser,
-        generateProGuardLexer,
-        generateProGuardParser,
-    )
-}
+registerLexer("ProGuardLexer", "io/mcdev/obfex/formats/proguard/gen")
+registerParser("ProGuardParser", "io/mcdev/obfex/formats/proguard/gen")

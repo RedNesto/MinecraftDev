@@ -19,22 +19,19 @@
  */
 
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskContainer
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.util.PatternFilterable
-import org.gradle.kotlin.dsl.RegisteringDomainObjectDelegateProviderWithTypeAndAction
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.register
 import org.jetbrains.intellij.platform.gradle.extensions.IntelliJPlatformDependenciesExtension
 
-typealias TaskDelegate<T> = RegisteringDomainObjectDelegateProviderWithTypeAndAction<out TaskContainer, T>
-
-fun Project.lexer(flex: String, pack: String): TaskDelegate<JFlexExec> {
+fun Project.registerLexer(flex: String, pack: String, name: String = "generate$flex"): TaskProvider<JFlexExec> {
     extensions.configure<PatternFilterable>("license") {
         exclude(pack.removeSuffix("/") + "/**")
     }
 
-    return tasks.registering(JFlexExec::class) {
+    val provider = tasks.register<JFlexExec>(name) {
         sourceFile.set(layout.projectDirectory.file("src/main/grammars/$flex.flex"))
         destinationDirectory.set(layout.buildDirectory.dir("gen/$pack/lexer"))
         destinationFile.set(layout.buildDirectory.file("gen/$pack/lexer/$flex.java"))
@@ -46,14 +43,20 @@ fun Project.lexer(flex: String, pack: String): TaskDelegate<JFlexExec> {
         val jflexSkeleton by project.configurations
         skeletonFile.set(jflexSkeleton.singleFile)
     }
+
+    tasks.named("generate") {
+        dependsOn(provider)
+    }
+
+    return provider
 }
 
-fun Project.parser(bnf: String, pack: String): TaskDelegate<ParserExec> {
+fun Project.registerParser(bnf: String, pack: String, name: String = "generate$bnf"): TaskProvider<ParserExec> {
     extensions.configure<PatternFilterable>("license") {
         exclude(pack.removeSuffix("/") + "/**")
     }
 
-    return tasks.registering(ParserExec::class) {
+    val provider = tasks.register<ParserExec>(name) {
         val destRoot = project.layout.buildDirectory.dir("gen")
         val dest = destRoot.map { it.dir(pack) }
         sourceFile.set(project.layout.projectDirectory.file("src/main/grammars/$bnf.bnf"))
@@ -65,6 +68,12 @@ fun Project.parser(bnf: String, pack: String): TaskDelegate<ParserExec> {
         val grammarKit by project.configurations
         this.grammarKit.setFrom(grammarKit)
     }
+
+    tasks.named("generate") {
+        dependsOn(provider)
+    }
+
+    return provider
 }
 
 fun IntelliJPlatformDependenciesExtension.registerMcDevDependencies() {
