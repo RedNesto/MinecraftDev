@@ -20,8 +20,8 @@
 
 package com.demonwav.mcdev.creator.custom.providers
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
+import com.demonwav.mcdev.creator.custom.CreatorSettings
 import com.demonwav.mcdev.creator.custom.TemplateDescriptor
 import com.demonwav.mcdev.creator.modalityState
 import com.demonwav.mcdev.update.PluginUtil
@@ -45,7 +45,7 @@ class BuiltinTemplateProvider : RemoteTemplateProvider() {
 
     override val hasConfig: Boolean = true
 
-    override suspend fun init(indicator: ProgressIndicator, repos: List<MinecraftSettings.TemplateRepo>) {
+    override suspend fun init(indicator: ProgressIndicator, repos: List<CreatorSettings.TemplateRepo>) {
         if (repoUpdated || repos.none { it.data.toBoolean() }) {
             // Auto update is disabled
             return
@@ -58,7 +58,7 @@ class BuiltinTemplateProvider : RemoteTemplateProvider() {
 
     override suspend fun loadTemplates(
         context: WizardContext,
-        repo: MinecraftSettings.TemplateRepo
+        repo: CreatorSettings.TemplateRepo
     ): Collection<LoadedTemplate> {
         val remoteTemplates = doLoadTemplates(context, repo, builtinTemplatesInnerPath)
         if (remoteTemplates.isNotEmpty()) {

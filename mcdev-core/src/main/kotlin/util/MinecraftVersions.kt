@@ -20,7 +20,7 @@
 
 package com.demonwav.mcdev.util
 
-import com.demonwav.mcdev.creator.custom.model.TemplateApi
+import com.demonwav.mcdev.creator.TemplateApi
 import com.intellij.openapi.projectRoots.JavaSdkVersion
 
 @TemplateApi

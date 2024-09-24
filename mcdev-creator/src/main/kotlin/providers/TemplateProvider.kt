@@ -20,7 +20,7 @@
 
 package com.demonwav.mcdev.creator.custom.providers
 
-import com.demonwav.mcdev.MinecraftSettings
+import com.demonwav.mcdev.creator.custom.CreatorSettings
 import com.demonwav.mcdev.creator.custom.TemplateDescriptor
 import com.demonwav.mcdev.creator.custom.TemplateResourceBundle
 import com.demonwav.mcdev.util.fromJson
@@ -57,9 +57,9 @@ interface TemplateProvider {
 
     val hasConfig: Boolean
 
-    suspend fun init(indicator: ProgressIndicator, repos: List<MinecraftSettings.TemplateRepo>) = Unit
+    suspend fun init(indicator: ProgressIndicator, repos: List<CreatorSettings.TemplateRepo>) = Unit
 
-    suspend fun loadTemplates(context: WizardContext, repo: MinecraftSettings.TemplateRepo): Collection<LoadedTemplate>
+    suspend fun loadTemplates(context: WizardContext, repo: CreatorSettings.TemplateRepo): Collection<LoadedTemplate>
 
     fun setupConfigUi(data: String, dataSetter: (String) -> Unit): JComponent?
 

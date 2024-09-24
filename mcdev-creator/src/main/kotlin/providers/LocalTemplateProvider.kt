@@ -20,8 +20,8 @@
 
 package com.demonwav.mcdev.creator.custom.providers
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
+import com.demonwav.mcdev.creator.custom.CreatorSettings
 import com.demonwav.mcdev.creator.modalityState
 import com.demonwav.mcdev.util.refreshSync
 import com.demonwav.mcdev.util.virtualFile
@@ -48,7 +48,7 @@ class LocalTemplateProvider : TemplateProvider {
 
     override suspend fun loadTemplates(
         context: WizardContext,
-        repo: MinecraftSettings.TemplateRepo
+        repo: CreatorSettings.TemplateRepo
     ): Collection<LoadedTemplate> {
         val rootPath = Path.of(repo.data.trim()).absolute()
         val repoRoot = rootPath.virtualFile

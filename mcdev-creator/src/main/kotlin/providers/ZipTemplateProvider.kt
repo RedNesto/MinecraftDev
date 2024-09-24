@@ -20,8 +20,8 @@
 
 package com.demonwav.mcdev.creator.custom.providers
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
+import com.demonwav.mcdev.creator.custom.CreatorSettings
 import com.demonwav.mcdev.creator.modalityState
 import com.demonwav.mcdev.util.refreshSync
 import com.intellij.ide.util.projectWizard.WizardContext
@@ -47,7 +47,7 @@ class ZipTemplateProvider : TemplateProvider {
 
     override suspend fun loadTemplates(
         context: WizardContext,
-        repo: MinecraftSettings.TemplateRepo
+        repo: CreatorSettings.TemplateRepo
     ): Collection<LoadedTemplate> {
         val archiveRoot = repo.data + JarFileSystem.JAR_SEPARATOR
         val fs = JarFileSystem.getInstance()

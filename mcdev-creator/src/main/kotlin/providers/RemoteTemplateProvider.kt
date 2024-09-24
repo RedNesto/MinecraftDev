@@ -20,9 +20,9 @@
 
 package com.demonwav.mcdev.creator.custom.providers
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.creator.custom.BuiltinValidations
+import com.demonwav.mcdev.creator.custom.CreatorSettings
 import com.demonwav.mcdev.creator.custom.TemplateDescriptor
 import com.demonwav.mcdev.creator.modalityState
 import com.demonwav.mcdev.creator.selectProxy
@@ -63,7 +63,7 @@ open class RemoteTemplateProvider : TemplateProvider {
 
     override val hasConfig: Boolean = true
 
-    override suspend fun init(indicator: ProgressIndicator, repos: List<MinecraftSettings.TemplateRepo>) {
+    override suspend fun init(indicator: ProgressIndicator, repos: List<CreatorSettings.TemplateRepo>) {
         for (repo in repos) {
             ProgressManager.checkCanceled()
             val remote = RemoteTemplateRepo.deserialize(repo.data)
@@ -117,7 +117,7 @@ open class RemoteTemplateProvider : TemplateProvider {
 
     override suspend fun loadTemplates(
         context: WizardContext,
-        repo: MinecraftSettings.TemplateRepo
+        repo: CreatorSettings.TemplateRepo
     ): Collection<LoadedTemplate> {
         val remoteRepo = RemoteTemplateRepo.deserialize(repo.data)
             ?: return emptyList()
@@ -126,7 +126,7 @@ open class RemoteTemplateProvider : TemplateProvider {
 
     protected fun doLoadTemplates(
         context: WizardContext,
-        repo: MinecraftSettings.TemplateRepo,
+        repo: CreatorSettings.TemplateRepo,
         rawInnerPath: String
     ): List<LoadedTemplate> {
         val remoteRootPath = RemoteTemplateRepo.getDestinationZip(repo.name)

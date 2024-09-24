@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.demonwav.mcdev.creator.custom.model
+package com.demonwav.mcdev.creator
 
 /**
  * Marker annotation indicating classes exposed to templates.

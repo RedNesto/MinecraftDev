@@ -20,6 +20,8 @@
 
 package com.demonwav.mcdev.creator.custom.model
 
+import com.demonwav.mcdev.creator.TemplateApi
+
 @TemplateApi
 data class ClassFqn(val fqn: String) {
 

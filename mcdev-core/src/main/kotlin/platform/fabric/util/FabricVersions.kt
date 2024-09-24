@@ -20,7 +20,7 @@
 
 package com.demonwav.mcdev.platform.fabric.util
 
-import com.demonwav.mcdev.creator.custom.model.TemplateApi
+import com.demonwav.mcdev.creator.TemplateApi
 import com.demonwav.mcdev.creator.selectProxy
 import com.demonwav.mcdev.update.PluginUtil
 import com.demonwav.mcdev.util.SemanticVersion

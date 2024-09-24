@@ -20,6 +20,8 @@
 
 package com.demonwav.mcdev.creator.custom.model
 
+import com.demonwav.mcdev.creator.TemplateApi
+
 @TemplateApi
 data class BuildSystemCoordinates(val groupId: String, val artifactId: String, val version: String) {
 

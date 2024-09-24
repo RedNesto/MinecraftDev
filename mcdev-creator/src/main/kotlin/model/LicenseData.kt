@@ -20,6 +20,7 @@
 
 package com.demonwav.mcdev.creator.custom.model
 
+import com.demonwav.mcdev.creator.TemplateApi
 import java.time.ZonedDateTime
 
 @TemplateApi

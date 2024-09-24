@@ -20,7 +20,6 @@
 
 package com.demonwav.mcdev.creator.custom
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.creator.custom.providers.EmptyLoadedTemplate
 import com.demonwav.mcdev.creator.custom.providers.LoadedTemplate
@@ -65,10 +64,10 @@ class CustomPlatformStep(
 
     val creatorScope = TemplateService.instance.scope("MinecraftDev Creator")
     val creatorUiScope = TemplateService.instance.scope("MinecraftDev Creator UI")
-    val templateRepos = MinecraftSettings.instance.creatorTemplateRepos
+    val templateRepos = CreatorSettings.instance.creatorTemplateRepos
 
-    val templateRepoProperty = propertyGraph.property<MinecraftSettings.TemplateRepo>(
-        templateRepos.firstOrNull() ?: MinecraftSettings.TemplateRepo.makeBuiltinRepo()
+    val templateRepoProperty = propertyGraph.property<CreatorSettings.TemplateRepo>(
+        templateRepos.firstOrNull() ?: CreatorSettings.TemplateRepo.makeBuiltinRepo()
     )
     var templateRepo by templateRepoProperty
 

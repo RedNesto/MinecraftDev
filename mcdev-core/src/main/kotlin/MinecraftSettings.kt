@@ -42,10 +42,18 @@ class MinecraftSettings : PersistentStateComponent<MinecraftSettings.State> {
 
         var mixinClassIcon: Boolean = true,
 
+        @Deprecated(
+            "No longer used, kept for migration purposes",
+            ReplaceWith(
+                "CreatorSettings.instance.creatorTemplateRepos",
+                "com.demonwav.mcdev.creator.custom.CreatorSettings"
+            )
+        )
         var creatorTemplateRepos: List<TemplateRepo> = listOf(TemplateRepo.makeBuiltinRepo()),
     )
 
     @Tag("repo")
+    @Deprecated("Moved to CreatorSettings")
     data class TemplateRepo(
         @get:Attribute("name")
         var name: String,
@@ -112,12 +120,6 @@ class MinecraftSettings : PersistentStateComponent<MinecraftSettings.State> {
         get() = state.mixinClassIcon
         set(mixinClassIcon) {
             state.mixinClassIcon = mixinClassIcon
-        }
-
-    var creatorTemplateRepos: List<TemplateRepo>
-        get() = state.creatorTemplateRepos.map { it.copy() }
-        set(creatorTemplateRepos) {
-            state.creatorTemplateRepos = creatorTemplateRepos.map { it.copy() }
         }
 
     enum class UnderlineType(private val regular: String, val effectType: EffectType) {

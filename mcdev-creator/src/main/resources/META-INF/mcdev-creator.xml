@@ -96,6 +96,13 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.demonwav.mcdev.creator.custom.CreatorSettings"/>
+        <applicationConfigurable bundle="messages.MinecraftDevelopment"
+                                 key="minecraft.settings.creator"
+                                 id="Settings.Minecraft.Creator"
+                                 parentId="Settings.Minecraft"
+                                 instance="com.demonwav.mcdev.creator.custom.CreatorConfigurable"/>
+
         <moduleBuilder id="CUSTOM_MINECRAFT_MODULE"
                        builderClass="com.demonwav.mcdev.creator.custom.CustomMinecraftModuleBuilder"/>
         <postStartupActivity implementation="com.demonwav.mcdev.creator.custom.TemplateProjectFinalizerActivity"/>

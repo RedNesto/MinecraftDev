@@ -20,7 +20,6 @@
 
 package com.demonwav.mcdev.creator.custom
 
-import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.asset.MCDevBundle
 import com.demonwav.mcdev.creator.custom.providers.TemplateProvider
 import com.intellij.openapi.ui.DialogWrapper
@@ -41,24 +40,24 @@ import javax.swing.JPanel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 
-private object NameColumn : ColumnInfo<MinecraftSettings.TemplateRepo, String>(
+private object NameColumn : ColumnInfo<CreatorSettings.TemplateRepo, String>(
     MCDevBundle("minecraft.settings.creator.repos.column.name")
 ) {
-    override fun valueOf(item: MinecraftSettings.TemplateRepo?): String? {
+    override fun valueOf(item: CreatorSettings.TemplateRepo?): String? {
         return item?.name
     }
 
-    override fun setValue(item: MinecraftSettings.TemplateRepo?, value: String?) {
+    override fun setValue(item: CreatorSettings.TemplateRepo?, value: String?) {
         item?.name = value ?: MCDevBundle("minecraft.settings.creator.repo.default_name")
     }
 
-    override fun isCellEditable(item: MinecraftSettings.TemplateRepo?): Boolean = true
+    override fun isCellEditable(item: CreatorSettings.TemplateRepo?): Boolean = true
 }
 
-private object ProviderColumn : ColumnInfo<MinecraftSettings.TemplateRepo, Any>(
+private object ProviderColumn : ColumnInfo<CreatorSettings.TemplateRepo, Any>(
     MCDevBundle("minecraft.settings.creator.repos.column.provider")
 ) {
-    override fun valueOf(item: MinecraftSettings.TemplateRepo?): ListWithSelection<String>? {
+    override fun valueOf(item: CreatorSettings.TemplateRepo?): ListWithSelection<String>? {
         val providers = TemplateProvider.getAllKeys()
         val list = ListWithSelection<String>(providers)
         list.select(item?.provider?.takeIf(providers::contains))
@@ -66,32 +65,32 @@ private object ProviderColumn : ColumnInfo<MinecraftSettings.TemplateRepo, Any>(
         return list
     }
 
-    override fun setValue(item: MinecraftSettings.TemplateRepo?, value: Any?) {
+    override fun setValue(item: CreatorSettings.TemplateRepo?, value: Any?) {
         item?.provider = value as? String ?: "local"
     }
 
-    override fun isCellEditable(item: MinecraftSettings.TemplateRepo?): Boolean = true
+    override fun isCellEditable(item: CreatorSettings.TemplateRepo?): Boolean = true
 
-    override fun getRenderer(item: MinecraftSettings.TemplateRepo?): TableCellRenderer? {
+    override fun getRenderer(item: CreatorSettings.TemplateRepo?): TableCellRenderer? {
         return ComboBoxTableCellRenderer.INSTANCE
     }
 
-    override fun getEditor(item: MinecraftSettings.TemplateRepo?): TableCellEditor? {
+    override fun getEditor(item: CreatorSettings.TemplateRepo?): TableCellEditor? {
         return ComboBoxTableCellEditor.INSTANCE
     }
 }
 
 fun Row.templateRepoTable(
-    prop: MutableProperty<List<MinecraftSettings.TemplateRepo>>
+    prop: MutableProperty<List<CreatorSettings.TemplateRepo>>
 ): Cell<JPanel> {
-    val model = object : ListTableModel<MinecraftSettings.TemplateRepo>(NameColumn, ProviderColumn) {
+    val model = object : ListTableModel<CreatorSettings.TemplateRepo>(NameColumn, ProviderColumn) {
         override fun addRow() {
             val defaultName = MCDevBundle("minecraft.settings.creator.repo.default_name")
-            addRow(MinecraftSettings.TemplateRepo(defaultName, "local", ""))
+            addRow(CreatorSettings.TemplateRepo(defaultName, "local", ""))
         }
     }
 
-    val table = TableView<MinecraftSettings.TemplateRepo>(model)
+    val table = TableView<CreatorSettings.TemplateRepo>(model)
     table.setShowGrid(true)
     table.tableHeader.reorderingAllowed = false
 

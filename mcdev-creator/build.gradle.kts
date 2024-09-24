@@ -24,6 +24,8 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.bundles.fuel)
+
     intellijPlatform {
         intellijIdeaCommunity(libs.versions.intellij.ide)
 
