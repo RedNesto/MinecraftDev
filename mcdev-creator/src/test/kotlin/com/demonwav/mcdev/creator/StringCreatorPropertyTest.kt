@@ -23,7 +23,6 @@ package com.demonwav.mcdev.creator
 import com.demonwav.mcdev.creator.custom.TemplateDescriptor
 import com.demonwav.mcdev.creator.custom.TemplateValidationItem
 import com.demonwav.mcdev.util.firstOfType
-import kotlin.collections.singleOrNull
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName

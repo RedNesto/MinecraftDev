@@ -72,6 +72,9 @@ dependencies {
     testFixturesCompileOnly(libs.junit.vintage) // Hack to get tests to compile and run
     testFixturesRuntimeOnly(libs.junit.engine)
     testFixturesRuntimeOnly(libs.junit.platform.launcher)
+
+    // Dependency of mcdev-core but also needed for some tests to run correctly
+    testRuntimeOnly(libs.bundles.coroutines)
 }
 
 tasks.test {

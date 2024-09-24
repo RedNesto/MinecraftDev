@@ -33,4 +33,6 @@ dependencies {
 
         pluginModule(implementation(projects.mcdevCore))
     }
+
+    testImplementation(testFixtures(projects.mcdevCore))
 }
