@@ -73,6 +73,7 @@ dependencies {
         bundledPlugin("org.jetbrains.plugins.yaml")
 
         pluginModule(implementation(projects.mcdevCore))
+        pluginModule(implementation(projects.mcdevCreator))
         pluginModule(implementation(projects.mcdevKotlin))
         pluginModule(implementation(projects.mcdevToml))
         pluginModule(implementation(projects.mcdevYaml))

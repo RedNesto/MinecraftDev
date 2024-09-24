@@ -49,6 +49,7 @@
     </change-notes>
 
     <xi:include href="mcdev-core.xml"/>
+    <xi:include href="mcdev-creator.xml"/>
     <depends optional="true" config-file="mcdev-kotlin.xml">org.jetbrains.kotlin</depends>
     <depends optional="true" config-file="mcdev-toml.xml">org.toml.lang</depends>
     <depends optional="true" config-file="mcdev-yaml.xml">org.jetbrains.plugins.yaml</depends>

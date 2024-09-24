@@ -22,6 +22,7 @@
 <idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>com.demonwav.minecraft-dev</id>
     <xi:include href="/META-INF/mcdev-core.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/mcdev-creator.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/mcdev-kotlin.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/mcdev-toml.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/mcdev-yaml.xml" xpointer="xpointer(/idea-plugin/*)"/>

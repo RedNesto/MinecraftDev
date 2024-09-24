@@ -18,16 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
-}
-
-rootProject.name = "MinecraftDev"
-include("obfuscation-explorer")
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include("mcdev-core", "mcdev-creator", "mcdev-kotlin", "mcdev-toml", "mcdev-yaml")
-include("mixin-test-data")
-
-startParameter.warningMode = WarningMode.All
+// IntelliJ doesn't seem to know what the base package is in the other files without this
+// (since there aren't any other files at this root level)
+package com.demonwav.mcdev.creator.custom
