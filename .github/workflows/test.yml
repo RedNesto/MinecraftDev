@@ -24,4 +24,6 @@ jobs:
             11
             17
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - run: ./gradlew build --no-daemon --stacktrace
