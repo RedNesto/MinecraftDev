@@ -648,6 +648,9 @@
                                        implementationClass="com.demonwav.mcdev.platform.mcp.aw.AwSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.demonwav.mcdev.platform.mcp.aw.AwColorSettingsPage"/>
         <lang.commenter language="Access Widener" implementationClass="com.demonwav.mcdev.platform.mcp.aw.AwCommenter"/>
+        <codeStyleSettingsProvider implementation="com.demonwav.mcdev.platform.mcp.aw.format.AwCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="com.demonwav.mcdev.platform.mcp.aw.format.AwLanguageCodeStyleSettingsProvider"/>
+        <lang.formatter language="Access Widener" implementationClass="com.demonwav.mcdev.platform.mcp.aw.format.AwFormattingModelBuilder"/>
         <annotator language="Access Widener" implementationClass="com.demonwav.mcdev.platform.mcp.aw.AwAnnotator"/>
         <lang.inspectionSuppressor language="Access Widener" implementationClass="com.demonwav.mcdev.platform.mcp.aw.inspections.AwInspectionSuppressor"/>
         <completion.contributor language="Access Widener"
