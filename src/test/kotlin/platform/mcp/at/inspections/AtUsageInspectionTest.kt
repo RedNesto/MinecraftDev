@@ -75,10 +75,10 @@ class AtUsageInspectionTest : BaseMinecraftTest(PlatformType.MCP, PlatformType.N
                 """
                 public net.minecraft.Used
                 public net.minecraft.Used usedField
-                <warning descr="Access Transformer entry is never used">public net.minecraft.Used unusedField</warning>
+                <warning descr="Entry is never used">public net.minecraft.Used unusedField</warning>
                 public net.minecraft.Used usedMethod()V
-                <warning descr="Access Transformer entry is never used">public net.minecraft.Used unusedMethod()V</warning>
-                <warning descr="Access Transformer entry is never used">public net.minecraft.server.Unused</warning>
+                <warning descr="Entry is never used">public net.minecraft.Used unusedMethod()V</warning>
+                <warning descr="Entry is never used">public net.minecraft.server.Unused</warning>
                 """.trimIndent()
             )
         }
